@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <b>Give your Claude app a whole new mood.</b><br>
+  <b>Give your Claude code in app a whole new mood.</b><br>
   Pick from 120 hand-named modern palettes, from <i>Matcha Latte</i> to <i>Tokyo Neon</i>, or turn any hex color into a full theme.
 </p>
 
