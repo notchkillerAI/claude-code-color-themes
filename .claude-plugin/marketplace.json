@@ -1,0 +1,5 @@
+{
+  "name": "claude-color-themes",
+  "owner": { "name": "notchkillerAI" },
+  "plugins": [{ "name": "olive-theme", "source": "./" }]
+}
