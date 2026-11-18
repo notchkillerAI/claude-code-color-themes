@@ -1,5 +1,14 @@
 {
   "name": "claude-color-themes",
-  "owner": { "name": "notchkillerAI" },
-  "plugins": [{ "name": "olive-theme", "source": "./" }]
+  "owner": {
+    "name": "Arpan Bhattacharya",
+    "url": "https://github.com/notchkillerAI"
+  },
+  "plugins": [
+    {
+      "name": "olive-theme",
+      "source": "./"
+    }
+  ],
+  "description": "120 modern color themes for the Claude desktop app, plus any custom color"
 }

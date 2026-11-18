@@ -1,1 +1,9 @@
-{ "name": "olive-theme", "version": "0.2.0", "description": "120 modern color themes for the Claude app, plus any custom color, picked with /colors" }
+{
+  "name": "olive-theme",
+  "version": "0.2.1",
+  "description": "120 modern color themes for the Claude app, plus any custom color, picked with /colors",
+  "author": {
+    "name": "Arpan Bhattacharya",
+    "url": "https://github.com/notchkillerAI"
+  }
+}

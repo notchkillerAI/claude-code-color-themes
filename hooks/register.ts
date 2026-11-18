@@ -9,7 +9,7 @@ const HEX = /^#[0-9a-f]{6}$/i
 
 function build(name: string): { look: ThemeSetArgs; unpainted?: string } {
   const custom = HEX.test(name)
-  const [hue, sat] = custom ? hueOf(name) : THEMES[name]
+  const [hue, sat] = custom ? hueOf(name) : (THEMES[name] ?? [68, 35])
   const { theme, problems } = makeColors(definitionFor(custom ? `custom ${name}` : name, hue, sat))
   return { look: { colors: theme }, unpainted: problems.find(line => line.startsWith("Desktop won't paint")) }
 }
@@ -58,13 +58,13 @@ export const register: Register = on => {
     }
     if (name === 'random') {
       const others = NAMES.filter(n => n !== current)
-      name = others[Math.floor(Math.random() * others.length)]
+      name = others[Math.floor(Math.random() * others.length)] ?? DEFAULT
     }
     if (name.startsWith('#') && !HEX.test(name)) {
       return { text: `"${name}" isn't a valid color. Use six hex digits, like /colors custom #ff6b6b.` }
     }
     if (!(name in THEMES) && !HEX.test(name)) {
-      const close = NAMES.filter(n => n.includes(name.split('-')[0])).slice(0, 8)
+      const close = NAMES.filter(n => n.includes(name.split('-')[0] ?? name)).slice(0, 8)
       return {
         text: `No theme named "${name}".${close.length ? ` Did you mean: ${close.join(', ')}?` : ''} Type /colors to see all ${NAMES.length}.`,
       }

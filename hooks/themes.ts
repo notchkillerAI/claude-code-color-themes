@@ -83,7 +83,7 @@ export function hsl(h: number, s: number, l: number): string {
   return '#' + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('')
 }
 
-const title = (name: string) => name.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
+const title = (name: string) => name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 
 /** A theme from a hue and tint strength, or from a #hex color. */
 export function definitionFor(name: string, hue: number, sat: number): Definition {
@@ -118,7 +118,9 @@ export function definitionFor(name: string, hue: number, sat: number): Definitio
 
 /** Hue and saturation of a #rrggbb color, for custom themes. */
 export function hueOf(hex: string): [number, number] {
-  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
   const l = (max + min) / 2
