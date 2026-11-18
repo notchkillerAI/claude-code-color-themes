@@ -289,7 +289,7 @@ Click a collection to see every theme in it, the command to use it, and its key 
 
 ## 💡 Good to know
 
-- Themes show in the **Claude desktop and mobile apps**. The terminal and editor extensions keep their own colors.
+- Themes show in the **Claude desktop app**. The terminal and editor extensions keep their own colors.
 - Permission prompts always keep Claude's standard look, for safety.
 - Error, success and warning colors stay red, green and amber in every theme, so nothing loses its meaning.
 
