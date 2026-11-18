@@ -60,6 +60,9 @@ export const register: Register = on => {
       const others = NAMES.filter(n => n !== current)
       name = others[Math.floor(Math.random() * others.length)]
     }
+    if (name.startsWith('#') && !HEX.test(name)) {
+      return { text: `"${name}" isn't a valid color. Use six hex digits, like /colors custom #ff6b6b.` }
+    }
     if (!(name in THEMES) && !HEX.test(name)) {
       const close = NAMES.filter(n => n.includes(name.split('-')[0])).slice(0, 8)
       return {
