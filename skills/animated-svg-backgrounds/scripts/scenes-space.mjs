@@ -241,7 +241,7 @@ function coderain(p) {
   const ink = hsl(p.hue, 75, 66)
   const glyphs = '01{}<>/=;:+*#$%&[]()λ∑∆'
   const style =
-    `@keyframes drop{from{transform:translateY(-${H}px)}to{transform:translateY(${H}px)}}` +
+    `@keyframes drop{from{transform:translateY(-${H + 420}px)}to{transform:translateY(${H + 40}px)}}` +
     `.col{animation:drop linear infinite;font-family:Menlo,Consolas,monospace;font-size:20px;font-weight:bold}`
   let body = '<g class="lo">'
   for (let c = 0; c < 38; c++) {

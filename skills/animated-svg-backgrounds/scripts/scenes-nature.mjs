@@ -72,9 +72,9 @@ function falling(
 ) {
   const r = seeded(seed)
   const style =
-    `@keyframes fall{from{transform:translate(${-sway}px,-${H}px) rotate(0deg)}` +
+    `@keyframes fall{from{transform:translate(${-sway}px,-${H + 80}px) rotate(0deg)}` +
     `50%{transform:translate(${sway}px,0) rotate(${spin ? 200 : 0}deg)}` +
-    `to{transform:translate(${-sway}px,${H}px) rotate(${spin ? 400 : 0}deg)}}` +
+    `to{transform:translate(${-sway}px,${H + 80}px) rotate(${spin ? 400 : 0}deg)}}` +
     `.f{animation:fall linear infinite;transform-box:fill-box;transform-origin:center}`
   let body = '<g class="lo">'
   for (let i = 0; i < count; i++) {
@@ -209,7 +209,7 @@ function sunset(p) {
     `<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky}" stop-opacity=".45"/><stop offset=".6" stop-color="${p.glow}" stop-opacity=".12"/><stop offset="1" stop-color="${p.glow}" stop-opacity="0"/></linearGradient>` +
     `<radialGradient id="soft"><stop offset="0" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}"/><stop offset=".6" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}" stop-opacity=".7"/><stop offset="1" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}" stop-opacity="0"/></radialGradient>`
   const style =
-    `@keyframes cloud{from{transform:translateX(-500px)}to{transform:translateX(${W + 500}px)}}` +
+    `@keyframes cloud{from{transform:translateX(-900px)}to{transform:translateX(${W + 900}px)}}` +
     `@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}` +
     `.c{animation:cloud linear infinite}.sun{animation:pulse 12s ease-in-out infinite;transform-box:fill-box;transform-origin:center}`
   const r = seeded(79)
@@ -218,7 +218,7 @@ function sunset(p) {
     const dur = n(90 + r() * 80)
     const y = n(60 + r() * 260)
     const s = 0.7 + r() * 0.8
-    clouds += `<g transform="translate(${n(r() * W - 600)},0)"><g class="c" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s" fill="url(#soft)" opacity=".6"><ellipse cx="0" cy="${y}" rx="${n(150 * s)}" ry="${n(34 * s)}"/><ellipse cx="${n(70 * s)}" cy="${n(y - 20 * s)}" rx="${n(90 * s)}" ry="${n(30 * s)}"/></g></g>`
+    clouds += `<g><g class="c" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s" fill="url(#soft)" opacity=".6"><ellipse cx="0" cy="${y}" rx="${n(150 * s)}" ry="${n(34 * s)}"/><ellipse cx="${n(70 * s)}" cy="${n(y - 20 * s)}" rx="${n(90 * s)}" ry="${n(30 * s)}"/></g></g>`
   }
   const body =
     `<rect width="${W}" height="${H}" fill="url(#sky)"/>` +
@@ -232,14 +232,14 @@ function clouds(p) {
   const tones = [hsl(p.hue, 60, 86), hsl((p.hue + 40) % 360, 55, 84), hsl((p.hue + 320) % 360, 55, 85)]
   const defs = tones.map((c, k) => `<radialGradient id="pf${k}"><stop offset="0" stop-color="${c}"/><stop offset=".6" stop-color="${c}" stop-opacity=".7"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')
   const style =
-    `@keyframes drift2{from{transform:translateX(-700px)}to{transform:translateX(${W + 700}px)}}` +
+    `@keyframes drift2{from{transform:translateX(-1000px)}to{transform:translateX(${W + 1000}px)}}` +
     `.cl{animation:drift2 linear infinite}` + TWINKLE
   let body = '<g class="lo">'
   for (let i = 0; i < 12; i++) {
     const dur = n(110 + r() * 90)
     const y = n(r() * H)
     const s = 0.7 + r() * 1.1
-    body += `<g transform="translate(${n(r() * W - 700)},0)"><g class="cl" fill="url(#pf${i % 3})" opacity=".55" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"><ellipse cy="${y}" rx="${n(190 * s)}" ry="${n(60 * s)}"/><ellipse cx="${n(110 * s)}" cy="${n(y - 30 * s)}" rx="${n(120 * s)}" ry="${n(55 * s)}"/></g></g>`
+    body += `<g><g class="cl" fill="url(#pf${i % 3})" opacity=".55" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"><ellipse cy="${y}" rx="${n(190 * s)}" ry="${n(60 * s)}"/><ellipse cx="${n(110 * s)}" cy="${n(y - 30 * s)}" rx="${n(120 * s)}" ry="${n(55 * s)}"/></g></g>`
   }
   body += `<g opacity=".5">${starField({ ...p, glow: hsl(p.hue, 40, 95) }, 139, 40)}</g>`
   return frame(p, style, body + '</g>', defs)
@@ -248,7 +248,7 @@ function clouds(p) {
 function ripples(p) {
   const r = seeded(193)
   const style =
-    `@keyframes ring{0%{transform:scale(.1);opacity:.9}100%{transform:scale(1);opacity:0}}` +
+    `@keyframes ring{0%{transform:scale(.1);opacity:0}8%{opacity:.9}100%{transform:scale(1);opacity:0}}` +
     `.rg{animation:ring ease-out infinite;transform-box:fill-box;transform-origin:center}`
   let body = `<g class="lo" fill="none">`
   for (let i = 0; i < 16; i++) {

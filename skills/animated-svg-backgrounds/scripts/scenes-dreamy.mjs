@@ -71,9 +71,9 @@ function falling(
 ) {
   const r = seeded(seed)
   const style =
-    `@keyframes fall{from{transform:translate(${-sway}px,-${H}px) rotate(0deg)}` +
+    `@keyframes fall{from{transform:translate(${-sway}px,-${H + 80}px) rotate(0deg)}` +
     `50%{transform:translate(${sway}px,0) rotate(${spin ? 200 : 0}deg)}` +
-    `to{transform:translate(${-sway}px,${H}px) rotate(${spin ? 400 : 0}deg)}}` +
+    `to{transform:translate(${-sway}px,${H + 80}px) rotate(${spin ? 400 : 0}deg)}}` +
     `.f{animation:fall linear infinite;transform-box:fill-box;transform-origin:center}`
   let body = '<g class="lo">'
   for (let i = 0; i < count; i++) {
@@ -90,7 +90,7 @@ function falling(
 }
 
 const risingStyle = (sway) =>
-  `@keyframes up{from{transform:translate(0,${H}px)}50%{transform:translate(${sway}px,0)}to{transform:translate(0,-${H}px)}}.u{animation:up linear infinite}`
+  `@keyframes up{from{transform:translate(0,${H + 120}px)}50%{transform:translate(${sway}px,0)}to{transform:translate(0,-${H + 120}px)}}.u{animation:up linear infinite}`
 
 function rising(seed, count, shape, speed) {
   const r = seeded(seed)
@@ -175,7 +175,7 @@ function bokeh(p) {
 function bubbles(p) {
   const r = seeded(83)
   const style =
-    `@keyframes rise{from{transform:translate(0,${H}px)}50%{transform:translate(30px,0)}to{transform:translate(0,-${H}px)}}` +
+    `@keyframes rise{from{transform:translate(0,${H + 80}px)}50%{transform:translate(30px,0)}to{transform:translate(0,-${H + 80}px)}}` +
     `.bb{animation:rise linear infinite}`
   let body = '<g class="lo">'
   for (let i = 0; i < 38; i++) {

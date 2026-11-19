@@ -1,6 +1,6 @@
 {
   "name": "session-stats",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "A session dashboard: time, turns, tools, files changed, context and cost (/session-stats)",
   "author": {
     "name": "Arpan Bhattacharya",
