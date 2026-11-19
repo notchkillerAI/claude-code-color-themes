@@ -36,7 +36,7 @@ This repository is a **marketplace of 10 plugins**. Install **everything** with 
 At the prompt of a Claude Code terminal session:
 
 ```
-/plugin install olive-theme --marketplace notchkillerAI/claude-color-themes
+/plugin install olive-theme --marketplace notchkillerAI/claude-code-color-themes
 ```
 
 Answer `y` to add the marketplace, then press **Enter** to install for your user. Everything is then controlled with **`/colors`** (type `/colors` to see all commands, or `/colors panel` for buttons).
@@ -59,15 +59,15 @@ Answer `y` to add the marketplace, then press **Enter** to install for your user
 Install any of them, one line each:
 
 ```
-/plugin install color-themes --marketplace notchkillerAI/claude-color-themes
-/plugin install ambient-bar --marketplace notchkillerAI/claude-color-themes
-/plugin install fun-spinners --marketplace notchkillerAI/claude-color-themes
-/plugin install prompt-colors --marketplace notchkillerAI/claude-color-themes
-/plugin install tool-cards --marketplace notchkillerAI/claude-color-themes
-/plugin install message-badges --marketplace notchkillerAI/claude-color-themes
-/plugin install sound-packs --marketplace notchkillerAI/claude-color-themes
-/plugin install session-stats --marketplace notchkillerAI/claude-color-themes
-/plugin install smart-menu --marketplace notchkillerAI/claude-color-themes
+/plugin install color-themes --marketplace notchkillerAI/claude-code-color-themes
+/plugin install ambient-bar --marketplace notchkillerAI/claude-code-color-themes
+/plugin install fun-spinners --marketplace notchkillerAI/claude-code-color-themes
+/plugin install prompt-colors --marketplace notchkillerAI/claude-code-color-themes
+/plugin install tool-cards --marketplace notchkillerAI/claude-code-color-themes
+/plugin install message-badges --marketplace notchkillerAI/claude-code-color-themes
+/plugin install sound-packs --marketplace notchkillerAI/claude-code-color-themes
+/plugin install session-stats --marketplace notchkillerAI/claude-code-color-themes
+/plugin install smart-menu --marketplace notchkillerAI/claude-code-color-themes
 ```
 
 > 💡 Choose **either** `olive-theme` (everything) **or** the separate plugins, not both, or features will show twice.
@@ -78,14 +78,14 @@ Install any of them, one line each:
 **From a shell** (works for any plugin name above)
 
 ```bash
-claude plugin install olive-theme --marketplace notchkillerAI/claude-color-themes
+claude plugin install olive-theme --marketplace notchkillerAI/claude-code-color-themes
 ```
 
 **In the Claude desktop app**
 
 1. Click **+** next to the prompt box
 2. Choose **Plugins** → **Add marketplace**
-3. Enter `notchkillerAI/claude-color-themes`
+3. Enter `notchkillerAI/claude-code-color-themes`
 4. Click **Add plugin** and pick the ones you want
 
 </details>
