@@ -1,0 +1,10 @@
+{
+  "name": "message-badges",
+  "version": "0.4.0",
+  "description": "22 badge styles above your messages and Claude replies (/badges)",
+  "author": {
+    "name": "Arpan Bhattacharya",
+    "url": "https://github.com/notchkillerAI"
+  },
+  "types": "./types/index.d.ts"
+}

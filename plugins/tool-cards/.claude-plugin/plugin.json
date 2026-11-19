@@ -1,0 +1,10 @@
+{
+  "name": "tool-cards",
+  "version": "0.4.0",
+  "description": "22 card styles around each tool step, with icons, status and test bars (/tool-cards)",
+  "author": {
+    "name": "Arpan Bhattacharya",
+    "url": "https://github.com/notchkillerAI"
+  },
+  "types": "./types/index.d.ts"
+}

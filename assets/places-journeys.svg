@@ -1,0 +1,302 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="808" height="508" viewBox="0 0 808 508">
+<g transform="translate(6,4)">
+  <clipPath id="c-santorini"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-santorini)">
+    <rect width="148" height="46" fill="#cddeee"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e4edf6"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#121a21" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#2c6196"/>
+    <rect y="46" width="148" height="46" fill="#0b1219"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#111c27"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eaedf0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#699ed3"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Santorini</text>
+</g>
+<g transform="translate(166,4)">
+  <clipPath id="c-kyoto"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-kyoto)">
+    <rect width="148" height="46" fill="#e8d3d7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f3e8e9"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1e1517" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#8d3544"/>
+    <rect y="46" width="148" height="46" fill="#160d0f"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#231517"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#efebec" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#ca7281"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Kyoto</text>
+</g>
+<g transform="translate(326,4)">
+  <clipPath id="c-iceland"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-iceland)">
+    <rect width="148" height="46" fill="#d8e1e4"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#eaeff0"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#171b1c" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#35778d"/>
+    <rect y="46" width="148" height="46" fill="#0f1314"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#181e20"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eceeee" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72b4ca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Iceland</text>
+</g>
+<g transform="translate(486,4)">
+  <clipPath id="c-sahara"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-sahara)">
+    <rect width="148" height="46" fill="#ebe0d0"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f4eee6"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1f1a14" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#8d6835"/>
+    <rect y="46" width="148" height="46" fill="#18130c"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#251e13"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#f0eeeb" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#caa572"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Sahara</text>
+</g>
+<g transform="translate(646,4)">
+  <clipPath id="c-amazon"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-amazon)">
+    <rect width="148" height="46" fill="#d0ebd7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e6f4ea"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#141f17" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#358d4b"/>
+    <rect y="46" width="148" height="46" fill="#0c180f"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#132518"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ebf0ec" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72ca88"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Amazon</text>
+</g>
+<g transform="translate(6,130)">
+  <clipPath id="c-paris-dusk"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-paris-dusk)">
+    <rect width="148" height="46" fill="#dbd5e7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#ece8f2"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#18161d" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#52358d"/>
+    <rect y="46" width="148" height="46" fill="#110e16"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#1a1622"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#edecef" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#9072ca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Paris Dusk</text>
+</g>
+<g transform="translate(166,130)">
+  <clipPath id="c-marrakech"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-marrakech)">
+    <rect width="148" height="46" fill="#edd6cf"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f5e9e5"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#201613" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#914930"/>
+    <rect y="46" width="148" height="46" fill="#180f0b"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#261712"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#f0ecea" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#cf866e"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Marrakech</text>
+</g>
+<g transform="translate(326,130)">
+  <clipPath id="c-bali"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-bali)">
+    <rect width="148" height="46" fill="#d2eae2"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e7f4ef"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#141f1b" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#358d6f"/>
+    <rect y="46" width="148" height="46" fill="#0d1714"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#14241f"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ebefee" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72caad"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Bali</text>
+</g>
+<g transform="translate(486,130)">
+  <clipPath id="c-seoul-night"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-seoul-night)">
+    <rect width="148" height="46" fill="#e2d0eb"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f0e6f4"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1b141f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#6f358d"/>
+    <rect y="46" width="148" height="46" fill="#140c18"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#1f1325"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eeebf0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#ad72ca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Seoul Night</text>
+</g>
+<g transform="translate(646,130)">
+  <clipPath id="c-havana"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-havana)">
+    <rect width="148" height="46" fill="#edd9cf"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f5eae5"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#201713" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#915130"/>
+    <rect y="46" width="148" height="46" fill="#18100b"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#261912"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#f0ecea" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#cf8e6e"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Havana</text>
+</g>
+<g transform="translate(6,256)">
+  <clipPath id="c-fjord"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-fjord)">
+    <rect width="148" height="46" fill="#d5dfe7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e8eef2"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#161a1d" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#35688d"/>
+    <rect y="46" width="148" height="46" fill="#0e1216"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#161d22"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ecedef" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72a5ca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Fjord</text>
+</g>
+<g transform="translate(166,256)">
+  <clipPath id="c-tuscany"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-tuscany)">
+    <rect width="148" height="46" fill="#eae2d2"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f4efe7"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1f1b14" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#8d6f35"/>
+    <rect y="46" width="148" height="46" fill="#17140d"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#241f14"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#efeeeb" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#caad72"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Tuscany</text>
+</g>
+<g transform="translate(326,256)">
+  <clipPath id="c-maldives"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-maldives)">
+    <rect width="148" height="46" fill="#ccf0f0"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e4f7f7"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#122121" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#279b9b"/>
+    <rect y="46" width="148" height="46" fill="#0a1a1a"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#102828"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eaf0f0" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#64d8d8"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Maldives</text>
+</g>
+<g transform="translate(486,256)">
+  <clipPath id="c-patagonia"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-patagonia)">
+    <rect width="148" height="46" fill="#d9dfe2"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#ebeef0"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#181a1b" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#356f8d"/>
+    <rect y="46" width="148" height="46" fill="#101214"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#191d1f"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ecedee" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72adca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Patagonia</text>
+</g>
+<g transform="translate(646,256)">
+  <clipPath id="c-cairo"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-cairo)">
+    <rect width="148" height="46" fill="#ebe3d0"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f4f0e6"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1f1c14" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#8d7235"/>
+    <rect y="46" width="148" height="46" fill="#18140c"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#252013"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#f0eeeb" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#cab072"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Cairo</text>
+</g>
+<g transform="translate(6,382)">
+  <clipPath id="c-swiss-alps"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-swiss-alps)">
+    <rect width="148" height="46" fill="#d9dee2"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#ebedf0"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#181a1b" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#35618d"/>
+    <rect y="46" width="148" height="46" fill="#101214"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#191c1f"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ecedee" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#729eca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Swiss Alps</text>
+</g>
+<g transform="translate(166,382)">
+  <clipPath id="c-mumbai-monsoon"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-mumbai-monsoon)">
+    <rect width="148" height="46" fill="#d5e2e7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e8f0f2"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#161b1d" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#35778d"/>
+    <rect y="46" width="148" height="46" fill="#0e1416"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#161f22"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eceeef" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72b4ca"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Mumbai Monsoon</text>
+</g>
+<g transform="translate(326,382)">
+  <clipPath id="c-jaipur"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-jaipur)">
+    <rect width="148" height="46" fill="#ebd0d7"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#f4e6ea"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#1f1417" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#8d354b"/>
+    <rect y="46" width="148" height="46" fill="#180c0f"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#251318"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#f0ebec" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#ca7288"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Jaipur</text>
+</g>
+<g transform="translate(486,382)">
+  <clipPath id="c-kerala"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-kerala)">
+    <rect width="148" height="46" fill="#d0ebd5"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e6f4e8"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#141f16" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#358d44"/>
+    <rect y="46" width="148" height="46" fill="#0c180e"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#132516"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#ebf0ec" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#72ca81"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Kerala</text>
+</g>
+<g transform="translate(646,382)">
+  <clipPath id="c-goa"><rect width="148" height="92" rx="12"/></clipPath>
+  <g clip-path="url(#c-goa)">
+    <rect width="148" height="46" fill="#cfedea"/>
+    <rect x="10" y="10" width="86" height="26" rx="6" fill="#e5f5f4"/>
+    <text x="18" y="28" font-size="13" font-weight="600" fill="#13201f" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa light</text>
+    <circle cx="124" cy="23" r="11" fill="#309189"/>
+    <rect y="46" width="148" height="46" fill="#0b1817"/>
+    <rect x="10" y="56" width="86" height="26" rx="6" fill="#122624"/>
+    <text x="18" y="74" font-size="13" font-weight="600" fill="#eaf0ef" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Aa dark</text>
+    <circle cx="124" cy="69" r="11" fill="#6ecfc6"/>
+  </g>
+  <rect width="148" height="92" rx="12" fill="none" stroke="#8888" stroke-width="1"/>
+  <text x="74" y="112" font-size="13" font-weight="600" text-anchor="middle" fill="#8a8f98" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">Goa</text>
+</g>
+</svg>

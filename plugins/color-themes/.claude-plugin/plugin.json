@@ -1,0 +1,10 @@
+{
+  "name": "color-themes",
+  "version": "0.4.0",
+  "description": "209 color themes with animated scenes, a mouse glow, a picker panel, auto themes and custom colors (/colors)",
+  "author": {
+    "name": "Arpan Bhattacharya",
+    "url": "https://github.com/notchkillerAI"
+  },
+  "types": "./types/index.d.ts"
+}

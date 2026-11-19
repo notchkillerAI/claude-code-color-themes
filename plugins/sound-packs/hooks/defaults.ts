@@ -1,0 +1,28 @@
+import type { Prefs } from '../types'
+
+// Everyone's starting settings. Each module declares its own atom over these.
+export const DEFAULTS: Prefs = {
+  theme: 'olive',
+  scene: 'auto',
+  glow: true,
+  auto: 'off',
+  contrast: false,
+  code: true,
+  sound: true,
+  favorites: ['olive'],
+  recent: [],
+  saved: {},
+  bar: true,
+  clock: true,
+  hour12: true,
+  quote: true,
+  focusMin: 25,
+  breakMin: 5,
+  spinner: 'auto',
+  prompt: 'pastel',
+  cards: 'soft',
+  badges: 'classic',
+  sounds: 'classic',
+  voice: false,
+  voiceName: '',
+}

@@ -46,6 +46,34 @@ export const GROUPS: Record<string, Record<string, [number, number]>> = {
     'desert-bloom': [350, 30], 'northern-lights': [150, 55], 'ocean-breeze': [190, 40], wildflower: [285, 35],
     'autumn-leaf': [25, 50],
   },
+  Gemstones: {
+    amethyst: [275, 50], sapphire: [225, 60], emerald: [150, 55], garnet: [350, 50], topaz: [40, 65],
+    opal: [190, 25], onyx: [230, 6], pearl: [40, 8], citrine: [50, 70], aquamarine: [180, 45],
+    tanzanite: [255, 55], malachite: [155, 50], moonstone: [215, 12], peridot: [85, 55], tourmaline: [330, 45],
+    lapis: [230, 60], 'black-opal': [260, 20], 'rose-gold': [15, 35], 'tigers-eye': [32, 55], quartz: [300, 10],
+  },
+  'Sweets & drinks': {
+    'bubble-tea': [30, 35], macaron: [330, 40], 'blueberry-muffin': [240, 35], 'mint-chip': [155, 40],
+    'cherry-cola': [355, 45], 'iced-latte': [30, 25], 'lavender-honey': [270, 30], 'mango-lassi': [42, 65],
+    taro: [280, 30], 'cookie-dough': [35, 40], 'raspberry-sorbet': [340, 55], 'pina-colada': [55, 45],
+    'earl-grey': [220, 10], 'hot-cocoa': [18, 35], 'key-lime': [75, 50], tiramisu: [28, 25],
+    'blue-raspberry': [200, 65], 'peach-tea': [25, 50], 'grape-soda': [285, 50], yuzu: [60, 65],
+  },
+  'Places & journeys': {
+    santorini: [210, 55], kyoto: [350, 35], iceland: [195, 20], sahara: [35, 45], amazon: [135, 45],
+    'paris-dusk': [260, 30], marrakech: [15, 50], bali: [160, 40], 'seoul-night': [280, 45], havana: [20, 50],
+    fjord: [205, 30], tuscany: [40, 40], maldives: [180, 60], patagonia: [200, 15], cairo: [42, 45],
+    'swiss-alps': [210, 15], 'mumbai-monsoon': [195, 30], jaipur: [345, 45], kerala: [130, 45], goa: [175, 50],
+  },
+  'Motion vibes': {
+    'psych-currents': [285, 55], 'shooting-star': [300, 60], 'night-drive': [265, 55], 'starlight-express': [215, 50],
+    'acid-wave': [75, 70], 'dream-pop': [330, 40], kaleidoscope: [20, 60], 'lava-lounge': [15, 60],
+    'lava-lime': [90, 55], 'chill-wave': [175, 45], 'mesh-candy': [320, 45], 'mesh-ocean': [200, 50],
+    'mesh-sunset': [25, 55], 'glow-up': [45, 65], holographic: [260, 35], hyperspace: [230, 50],
+    'warp-drive': [190, 60], 'city-bokeh': [40, 50], 'fairy-lights': [50, 45], 'midnight-jazz': [225, 40],
+    'solar-system': [35, 40], 'cosmic-orbit': [260, 45], 'bass-drop': [290, 60], 'lofi-beats': [250, 30],
+    rave: [320, 70], 'raindrop-ripples': [200, 35], 'koi-pond': [25, 50], 'topo-map': [100, 30], 'desert-dunes': [35, 40],
+  },
 }
 
 export const THEMES: Record<string, [number, number]> = Object.assign({}, ...Object.values(GROUPS))
@@ -132,4 +160,68 @@ export function hueOf(hex: string): [number, number] {
   let h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4
   h = (h * 60 + 360) % 360
   return [Math.round(h), Math.round(Math.min(s, 0.7) * 100)]
+}
+
+export const HEX = /^#[0-9a-f]{6}$/i
+
+export const titleOf = (name: string): string => (HEX.test(name) ? `Custom ${name}` : title(name))
+
+/** The collection a theme belongs to, or undefined for a custom color. */
+export function groupOf(name: string): string | undefined {
+  return Object.keys(GROUPS).find(group => name in (GROUPS[group] ?? {}))
+}
+
+/** Hue and tint strength of a theme name or a #hex color. */
+export function hueSatOf(name: string): [number, number] {
+  return HEX.test(name) ? hueOf(name) : (THEMES[name] ?? [68, 35])
+}
+
+// Code highlighting to pair with each collection. A surface keeps its own
+// highlighting for a name it doesn't offer, so an unknown name is harmless.
+const CODE: Record<string, { light: string; dark: string }> = {
+  'Soft pastels': { light: 'catppuccin-latte', dark: 'catppuccin-mocha' },
+  'Earthy & cozy': { light: 'gruvbox-light-medium', dark: 'gruvbox-dark-medium' },
+  'Bold & vibrant': { light: 'github-light', dark: 'one-dark-pro' },
+  'Dark & moody': { light: 'solarized-light', dark: 'tokyo-night' },
+  'Aesthetic vibes': { light: 'rose-pine-dawn', dark: 'synthwave-84' },
+  'Nature escapes': { light: 'everforest-light', dark: 'everforest-dark' },
+  Gemstones: { light: 'github-light', dark: 'dracula' },
+  'Sweets & drinks': { light: 'catppuccin-latte', dark: 'catppuccin-frappe' },
+  'Places & journeys': { light: 'min-light', dark: 'night-owl' },
+  'Motion vibes': { light: 'github-light', dark: 'synthwave-84' },
+}
+
+export type Options = { contrast?: boolean; code?: boolean }
+
+/** The whole definition for makeColors: colors, plus code colors and contrast. */
+export function fullDefinition(name: string, options: Options = {}): Definition {
+  const [hue, sat] = hueSatOf(name)
+  const base = definitionFor(name, hue, sat)
+  const group = groupOf(name)
+  const code = options.code === false ? undefined : (group !== undefined ? CODE[group] : { light: 'github-light', dark: 'github-dark' })
+  return {
+    ...base,
+    label: titleOf(name),
+    ...(code !== undefined ? { codeTheme: code } : {}),
+    ...(options.contrast === true ? { contrast: 'more' as const } : {}),
+  }
+}
+
+/** The colors a backdrop scene paints with. */
+export function paletteFor(name: string): { light: string; dark: string; accent: string; glow: string; hue: number } {
+  const [hue, sat] = hueSatOf(name)
+  const d = definitionFor(name, hue, sat)
+  const light = d.light?.gray?.anchors?.['surface-0'] ?? hsl(hue, sat, 87)
+  const dark = d.dark?.gray?.anchors?.['surface-0'] ?? hsl(hue, sat, 7)
+  const accentRole = d.roles?.accent
+  const accent = typeof accentRole === 'string' ? accentRole : hsl(hue, Math.max(sat, 45), 38)
+  return { light, dark, accent, glow: hsl(hue, Math.max(sat, 55), 64), hue }
+}
+
+/** A fresh, random, good-looking color for /colors surprise. */
+export function surpriseColor(random: () => number = Math.random): string {
+  const hue = Math.floor(random() * 360)
+  const sat = 45 + Math.floor(random() * 35)
+  const light = 42 + Math.floor(random() * 16)
+  return hsl(hue, sat, light)
 }

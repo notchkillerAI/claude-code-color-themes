@@ -7,7 +7,53 @@
   "plugins": [
     {
       "name": "olive-theme",
-      "source": "./"
+      "source": "./",
+      "description": "Everything in one: all themes, scenes, the bar and every style extra (/colors)"
+    },
+    {
+      "name": "color-themes",
+      "source": "./plugins/color-themes",
+      "description": "209 color themes with animated scenes, a mouse glow, a picker panel, auto themes and custom colors (/colors)"
+    },
+    {
+      "name": "ambient-bar",
+      "source": "./plugins/ambient-bar",
+      "description": "A clock, a focus timer and a daily quote above the prompt (/bar)"
+    },
+    {
+      "name": "fun-spinners",
+      "source": "./plugins/fun-spinners",
+      "description": "27 themed spinners: Brewing ☕, Wishing 🌠, Swirling 🌀 and more (/spinner)"
+    },
+    {
+      "name": "prompt-colors",
+      "source": "./plugins/prompt-colors",
+      "description": "24 styles that color /commands, @files, links and TODOs as you type (/prompt-colors)"
+    },
+    {
+      "name": "tool-cards",
+      "source": "./plugins/tool-cards",
+      "description": "22 card styles around each tool step, with icons, status and test bars (/tool-cards)"
+    },
+    {
+      "name": "message-badges",
+      "source": "./plugins/message-badges",
+      "description": "22 badge styles above your messages and Claude replies (/badges)"
+    },
+    {
+      "name": "sound-packs",
+      "source": "./plugins/sound-packs",
+      "description": "25 sound packs for done, error and question, plus a spoken \"All done!\" (/sounds)"
+    },
+    {
+      "name": "session-stats",
+      "source": "./plugins/session-stats",
+      "description": "A session dashboard: time, turns, tools, files changed, context and cost (/session-stats)"
+    },
+    {
+      "name": "smart-menu",
+      "source": "./plugins/smart-menu",
+      "description": "Right-click actions: explain, find bugs, improve, explain simply, and make a theme from a color"
     }
   ],
   "description": "120 modern color themes for the Claude desktop app, plus any custom color"
