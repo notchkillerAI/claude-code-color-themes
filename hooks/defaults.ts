@@ -26,4 +26,5 @@ export const DEFAULTS: Prefs = {
   sounds: 'classic',
   voice: false,
   voiceName: '',
+  font: 'default',
 }

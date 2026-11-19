@@ -20,7 +20,9 @@
   <a href="#-animated-scenes">Animated scenes</a> •
   <a href="#-themes">Themes</a> •
   <a href="#-custom-colors">Custom colours</a> •
+  <a href="#%EF%B8%8F-your-own-wallpaper">Wallpaper</a> •
   <a href="#-more-customization">More customization</a> •
+  <a href="#-where-it-works">Where it works</a> •
   <a href="#-claude-code-skills">Skills</a> •
   <a href="#-every-theme">Every theme</a> •
   <a href="#%EF%B8%8F-limitations">Limitations</a>
@@ -137,9 +139,10 @@ Every theme comes with a slow, animated background scene behind the conversation
 
 ### ⌨️ Type-ahead: no names to memorise
 
-Type `/colors ` and start typing. The suggestion list narrows **with every letter** to the names that contain it, each with a hint:
+Start typing `/col` and the **whole menu pops up** like a search box: every customization (`/colors panel`, `/colors wallpaper`, `/colors scene`, `/colors spinner`, `/colors focus`…) with a one-line hint. Pick one, or keep typing: the list narrows **with every letter** to the names that contain it:
 
 ```
+/col          →  /colors panel · /colors wallpaper · /colors scene · /colors spinner · /colors focus …
 /colors s     →  sakura · sahara · santorini · shooting-star · seafoam · scene · surprise …
 /colors sa    →  sahara · sakura · santorini · savanna · …
 /colors sak   →  sakura   🌸 Nature escapes · falling petals
@@ -171,6 +174,31 @@ It works for every option, not just themes: `/colors scene psy` → `psychflow`,
 
 **Tips:** rich mid-tones like `#6c5ce7` make striking themes; pale colours give calm ones. Keep one with `/colors save <name>`. You can also **right-click** any hex colour in the chat and choose **Make a theme from it** (with `smart-menu` or `olive-theme`).
 
+## 🖼️ Your own wallpaper
+
+Use **your own picture** or a **gradient** as the background behind Claude Code:
+
+```
+/colors wallpaper ~/Pictures/beach.jpg              your picture (colors matched to it)
+/colors wallpaper "~/My Photos/city night.png" sharp    quotes for paths with spaces
+/colors wallpaper ~/Pictures/art.webp contain keep  whole picture, keep your current theme
+/colors wallpaper gradient #ff6b6b #6c5ce7 #29e7ff  a 2 to 4 color gradient
+/colors wallpaper off                               back to the animated scene (on brings it back)
+```
+
+**Formats it accepts**
+
+| Format | macOS | Windows | Linux |
+| --- | --- | --- | --- |
+| `.jpg` `.jpeg` `.png` `.gif` `.bmp` `.tiff` | ✅ | ✅ | ✅ needs ImageMagick or ffmpeg |
+| `.webp` `.heic` `.heif` | ✅ | ❌ convert to `.jpg` or `.png` first | ✅ needs ImageMagick or ffmpeg |
+| `.svg` | ✅ used as it is | ✅ | ✅ |
+
+- **Any size works**: the picture is resized automatically, so a phone photo or a 4K wallpaper are both fine.
+- **Options** (add at the end): `soft` (default: a smooth, dreamy version) or `sharp` (crisper, pixel-art look); `cover` (default: fills the window), `contain` (shows the whole picture) or `stretch`; `keep` to keep your current theme instead of matching colors to the picture.
+- **How it's drawn:** Claude Code only allows vector backgrounds, so the picture is redrawn as soft color strips. Expect a painterly, low-detail version of a photo, not a pin-sharp one. Simple, colorful pictures look best. An `.svg` must be pure vector (no embedded images, fonts or links) and under 128 KB.
+- **On Linux**, install one image tool once: `sudo apt install imagemagick` (or `ffmpeg`). macOS and Windows already have what's needed.
+
 ## 🧩 More customization
 
 Each of these is its own plugin, and is also included in the all-in-one `olive-theme`. Add `list` to see every style and `off` to turn it off.
@@ -182,9 +210,26 @@ Each of these is its own plugin, and is also included in the all-in-one `olive-t
 | ⌨️ **Prompt colors** (24) | `/prompt-colors neon` | `/colors prompt neon` | `/commands`, `@files`, `app.py`, links, `TODO`, numbers each in their own colour |
 | 🧰 **Tool cards** (22) | `/tool-cards neon` | `/colors cards neon` | `╭ 💻 Bash  ✓ done ╮` with a `██████████░ 18/20 passed` test bar |
 | 💬 **Message badges** (48 designs × 22 colour sets) | `/badges kawaii` · `/badges colors sunset` | `/colors badges kawaii` · `/colors badge-colors sunset` | `👩‍🚀 You` · `🛸 Claude`, pills like ` YOU ` / ` CLAUDE `, or `auto`: your theme's own emoji and colours |
-| 🔔 **Sound packs** (25) | `/sounds arcade` · `/sounds voice on` | `/colors sounds arcade` · `/colors voice on` | Different sounds for done, error and question; your Mac can say "All done!" |
+| 🔔 **Sound packs** (25) | `/sounds arcade` · `/sounds voice on` | `/colors sounds arcade` · `/colors voice on` | Different sounds for done, error and question; your computer can say "All done!" (macOS, Windows and Linux) |
 | 📈 **Session stats** | `/session-stats` | `/colors stats` | Time, turns, tool bar chart, files changed, context %, cost |
 | 🖱️ **Smart menu** | right-click selected text | right-click | 💡 Explain · 🐞 Find bugs · ✨ Improve · 🧒 Explain simply · 🎨 Make a theme |
+| 🖼️ **Wallpaper** | `/colors wallpaper <image>` | `/colors wallpaper <image>` | Your own picture or a gradient behind everything (see above) |
+| 🔤 **Text style** | n/a | `/colors font mono` | `default`, `mono`, `bold` or `italic` text in the bar and badges |
+| ⌨️ **Type-ahead menu** | every command (`/bar`, `/spinner`, `/badges`, `/sounds`…) | `/col…` | The full menu pops up as you type, then narrows letter by letter |
+| 🎨 **Themes & scenes** | `/colors <name>` · `/colors scene <name>` | same | 209 themes, 27 animated scenes, mouse glow, `auto` time/daily/season themes, custom colors, saved palettes, favorites, undo, high contrast, matching code colors |
+| 🗂️ **Picker panel** | `/colors panel` | same | Every theme by sight, favorites, recent, and a button for every setting above |
+
+## 🌍 Where it works
+
+| | macOS | Windows | Linux |
+| --- | --- | --- | --- |
+| Themes, animated scenes, mouse glow, wallpaper | ✅ Claude desktop app | ✅ Claude desktop app | ✅ Claude desktop app, where available |
+| Ambient bar, spinners, prompt colors, tool cards, badges, stats, type-ahead | ✅ app and terminal | ✅ app and terminal | ✅ app and terminal |
+| Sounds | ✅ | ✅ through PowerShell | ✅ needs `paplay`, `aplay`, `pw-play` or `ffplay` (usually already there) |
+| Spoken "All done!" | ✅ | ✅ Windows voices | ✅ needs `spd-say` or `espeak` |
+| Skills (banners, palettes, vibes) | ✅ | ✅ | ✅ needs Node.js 18+ |
+
+The **skills** also work in other AI agents that can run commands (Codex CLI, Gemini CLI, Cursor, Copilot agent mode, Cline, Kiro…). In chat-only apps (Claude.ai, ChatGPT…) they hand over ready-made files instead.
 
 <details>
 <summary>All the style names</summary>
@@ -522,7 +567,10 @@ Good to know before you install:
 - **Some parts keep Claude's own look:** permission prompts, and the desktop app's step descriptions in the spinner (it adds the icon instead).
 - **Code highlighting styles** depend on what the app offers. If it doesn't know one, it keeps its usual code colours.
 - **The theme picker and stats panels** open in the desktop app or a fullscreen terminal.
-- **Sounds and voice** play on macOS. Linux and Windows terminals stay silent, and a voice name must be installed on your Mac.
+- **Sounds and voice** play on macOS, Windows and Linux. On Linux they need a sound player (`paplay`, `aplay`, `pw-play` or `ffplay`) and a voice tool (`spd-say` or `espeak`); a named voice must be installed on your computer.
+- **Wallpapers are drawn as soft vector art**, not as the original photo: Claude Code only allows vector backgrounds. `.webp` and `.heic` need macOS or Linux; on Windows use `.jpg` or `.png`. Linux needs ImageMagick or ffmpeg.
+- **Fonts:** plugins can't change the Claude app's own font. `/colors font` styles only the bar and badges.
+- **Windows and Linux** builds are written for and follow each system's own tools, but were tested on macOS; please open an issue if something misbehaves.
 - **Auto themes** follow your computer's clock; seasons follow the northern hemisphere.
 - **Session stats** start fresh in each session.
 - **Make a theme from a colour** in the right-click menu needs `olive-theme` or `color-themes` installed too.

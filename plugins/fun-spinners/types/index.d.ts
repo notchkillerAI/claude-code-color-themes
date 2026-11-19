@@ -32,7 +32,11 @@ export type Prefs = {
   sounds: string
   voice: boolean
   voiceName: string
+  /** Text style for the bar and badges: default, mono, bold or italic. */
+  font: string
 }
+
+export type WallpaperState = { svg: string; color: string; source: string; width: number; height: number }
 
 export type SessionStats = {
   turns: number
@@ -56,6 +60,6 @@ export type FocusTimer = {
 
 declare module 'claude-code' {
   interface PluginState {
-    'fun-spinners': { prefs: Shaped<Prefs>; tab: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats }
+    'fun-spinners': { prefs: Shaped<Prefs>; tab: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats; wallpaper: WallpaperState | null }
   }
 }

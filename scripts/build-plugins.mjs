@@ -61,15 +61,15 @@ const LIST_OFF = "[{ name: 'list', description: 'Show every option' }, { name: '
 const PLUGINS = [
   {
     name: 'color-themes',
-    description: '209 color themes with animated scenes, a mouse glow, a picker panel, auto themes and custom colors (/colors)',
-    files: ['themes.ts', 'scenes.ts', 'glow.ts', 'make-colors.js', 'make-colors.d.ts', 'defaults.ts', 'prefs.ts', 'autocomplete.ts'],
+    description: '209 color themes with animated scenes, your own image or gradient as wallpaper, a mouse glow, a picker panel, auto themes and custom colors (/colors)',
+    files: ['themes.ts', 'scenes.ts', 'glow.ts', 'make-colors.js', 'make-colors.d.ts', 'defaults.ts', 'prefs.ts', 'autocomplete.ts', 'wallpaper.ts', 'audio.ts'],
     sounds: true,
     register: () => stripBundle(readFileSync('hooks/register.tsx', 'utf8')),
   },
   {
     name: 'ambient-bar',
     description: 'A clock, a focus timer and a daily quote above the prompt (/bar)',
-    files: ['bar.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    files: ['bar.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts', 'audio.ts'],
     sounds: true,
     register: n => standalone(n, "import { BAR_HELP, barCommand, registerBar, startBar } from './bar.js'\n" + AC, `${typeahead('bar', `{
     first: [...ON_OFF, ...choices(['focus', 'clock', 'quote', 'break', 'help'])],
@@ -127,7 +127,7 @@ ${command('badges', '', '', "first === 'colors' ? badgeColorsCommand($, words[1]
   {
     name: 'sound-packs',
     description: '25 sound packs for done, error and question, plus a spoken "All done!" (/sounds)',
-    files: ['sounds.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    files: ['sounds.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts', 'audio.ts'],
     sounds: true,
     register: n => standalone(n, "import { SOUND_PACKS, doneLine, playEvent, soundsCommand } from './sounds.js'\n" + AC, `${typeahead('sounds', `{
     first: [...choices(['classic', ...Object.keys(SOUND_PACKS)]), { name: 'voice', description: 'Spoken \\"All done!\\"' }, ...${LIST_OFF}],

@@ -2,7 +2,7 @@
 name: color-palette-studio
 description: Build an accessible light and dark color palette (background, surfaces, text, accent, success, warning, danger, info) from one hex color, a mood word, or one of 209 named themes, with every text color checked against WCAG contrast, and output it as CSS variables, Tailwind config, SCSS or JSON. Use when the user wants a color scheme, a theme, dark mode colors, brand colors turned into a UI palette, or asks whether colors are readable.
 summary: One color, mood or named theme in; a complete light and dark UI palette out, with every text color checked for WCAG contrast. Outputs CSS variables, Tailwind, SCSS or JSON.
-version: 1.0.0
+version: 1.1.0
 tags: [color, palette, theme, dark-mode, accessibility, wcag, tailwind, css]
 keywords: [color palette, dark mode colors, ui palette, wcag contrast, tailwind colors, css variables, brand colors]
 use_cases:
@@ -17,12 +17,29 @@ docs_url: https://github.com/notchkillerAI/claude-code-color-themes
 Requires: Node.js 18 or newer.
 
 **Before running a script,** check Node.js with `node --version`. If it's missing or
-older than 18, tell the user to install the LTS version from https://nodejs.org (or
-`brew install node` on a Mac) and stop there; don't try other ways to run the script.
-Output folders are created automatically.
+older than 18, tell the user they can install the LTS version from https://nodejs.org
+(`brew install node` on a Mac, `winget install OpenJS.NodeJS.LTS` on Windows, or their
+package manager on Linux), and meanwhile use the ready-made files described under
+"If you can't run commands". Output folders are created automatically.
 
 Turn a single color, a mood, or a named theme into a complete, readable UI palette
 for both light and dark mode, then drop it straight into the user's project.
+
+## Where this works
+
+| Where | What happens |
+| --- | --- |
+| **Agents that can run commands**: Claude Code, Codex CLI, Gemini CLI, Cursor (agent mode), VS Code with Copilot agent mode, Cline, Kiro, OpenClaw and similar | Full skill: runs the script for any color, mood or theme and saves the palette into the project |
+| **Chat apps that can't run commands**: Claude.ai, ChatGPT, Grok, DeepSeek and similar | Uses the ready-made files in `references/` instead (see below) |
+| **Operating systems** | macOS, Windows and Linux: the scripts are plain Node.js. In PowerShell the same commands work as written. |
+
+## If you can't run commands
+
+Open `references/palettes.md`: ready-made, contrast-checked palettes (light and dark CSS) for
+all 30 moods and 19 popular themes. Give the user the matching block, converted to Tailwind,
+SCSS or JSON if they asked. For a custom hex color, pick the closest mood or theme by hue and
+say it is the nearest ready-made match; for an exact palette from their own color, suggest an
+agent that can run commands.
 
 ## How to use
 

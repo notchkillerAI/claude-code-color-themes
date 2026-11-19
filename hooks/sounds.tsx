@@ -1,4 +1,5 @@
 import { atom, read } from 'claude-code'
+import { playWav, sayAloud } from './audio.js'
 import type { EngineInterface as Engine, On } from 'claude-code'
 
 import { DEFAULTS } from './defaults.js'
@@ -89,7 +90,7 @@ export async function playEvent($: Engine, kind: 'done' | 'error' | 'ask' | 'foc
   const prefs = await read($, prefsAtom)
   if (prefs.sound !== false && prefs.sounds !== 'off') {
     if (prefs.sounds === 'classic' || prefs.sounds === undefined) {
-      void $.audio.play({ asset: 'sounds/chime.wav' }).catch(() => undefined)
+      await playWav($, { asset: 'sounds/chime.wav' })
     } else {
       const pack = SOUND_PACKS[prefs.sounds] ?? SOUND_PACKS.chime!
       const key = `${prefs.sounds}:${kind === 'focus' ? 'done' : kind}`
@@ -98,11 +99,11 @@ export async function playEvent($: Engine, kind: 'done' | 'error' | 'ask' | 'foc
         base64 = wav(pack, kind === 'focus' ? 'done' : kind)
         clips.set(key, base64)
       }
-      void $.audio.play({ base64, mime: 'audio/wav' }).catch(() => undefined)
+      await playWav($, { base64 })
     }
   }
   if (prefs.voice === true && said !== undefined) {
-    void $.audio.speak(said, prefs.voiceName !== '' ? { voice: prefs.voiceName } : undefined).catch(() => undefined)
+    void sayAloud($, said, prefs.voiceName)
   }
 }
 
@@ -119,12 +120,12 @@ export async function soundsCommand($: Engine, sub: 'sounds' | 'voice', arg: str
   }
   if (arg === 'off' || arg === 'on') {
     await savePrefs($, p => ({ ...p, voice: arg === 'on' }))
-    if (arg === 'on') void $.audio.speak('Voice on. I will tell you when I am done.').catch(() => undefined)
+    if (arg === 'on') void sayAloud($, 'Voice on. I will tell you when I am done.')
     return `Voice ${arg}.`
   }
   if (rest !== '') {
     await savePrefs($, p => ({ ...p, voice: true, voiceName: rest }))
-    void $.audio.speak('Hello! This is my new voice.', { voice: rest }).catch(() => undefined)
+    void sayAloud($, 'Hello! This is my new voice.', rest)
     return `Voice on, using "${rest}". If you hear nothing, that voice isn't installed on this Mac.`
   }
   const after = await savePrefs($, p => ({ ...p, voice: !p.voice }))

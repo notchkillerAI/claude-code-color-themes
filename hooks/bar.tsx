@@ -1,4 +1,5 @@
 import { atom, read, update } from 'claude-code'
+import { playWav } from './audio.js'
 import type { EngineInterface as Engine, On } from 'claude-code'
 
 import type { FocusTimer, Prefs } from '../types'
@@ -187,7 +188,7 @@ export async function startBar($: Engine, deps: BarDeps): Promise<void> {
             $.ui.toast('☕ Break over. Ready for the next one?')
             void $.ui.notify('Break over. Start another focus session when you are ready.', { title: '☕ Break over' })
           }
-          if (prefs.sound) void $.audio.play({ asset: 'sounds/chime.wav' }).catch(() => undefined)
+          if (prefs.sound) await playWav($, { asset: 'sounds/chime.wav' })
         }
 
         const minute = Math.floor(now / 60_000)
@@ -218,8 +219,8 @@ export function registerBar(on: On, deps: BarDeps): void {
     return (
       <Box flexDirection="column">
         <Box flexDirection="row" flexWrap="wrap" columnGap={2}>
-          {deps.themeLabel(prefs) !== '' ? <Text bold>{deps.themeLabel(prefs)}</Text> : null}
-          {prefs.clock !== false ? <Text>🕐 {clockText(now, tz, prefs.hour12 !== false)}</Text> : null}
+          {deps.themeLabel(prefs) !== '' ? <Text bold {...fontOf(prefs)}>{deps.themeLabel(prefs)}</Text> : null}
+          {prefs.clock !== false ? <Text {...fontOf(prefs)}>🕐 {clockText(now, tz, prefs.hour12 !== false)}</Text> : null}
           {prefs.clock !== false && !narrow ? <Text dimColor>{greeting(now, tz)}</Text> : null}
           <Box flexDirection="row" columnGap={1}>
             {timer.mode === 'idle' ? (
@@ -247,7 +248,7 @@ export function registerBar(on: On, deps: BarDeps): void {
         </Box>
         {prefs.quote !== false ? (
           <Box flexDirection="row" columnGap={1}>
-            <Text dimColor italic wrap="truncate-end">
+            <Text dimColor italic wrap="truncate-end" {...(fontOf(prefs).mono === true ? { mono: true } : {})}>
               ✨ {quote}
             </Text>
             <Button key="quote-next" plain onPress={() => void nextQuote($)}>
@@ -260,6 +261,11 @@ export function registerBar(on: On, deps: BarDeps): void {
   })
 }
 
+/** Text style for the plugin's own text: the app's own font can't be changed. */
+function fontOf(prefs: Prefs): { mono?: boolean; bold?: boolean; italic?: boolean } {
+  const f = (prefs as Prefs & { font?: string }).font
+  return f === 'mono' ? { mono: true } : f === 'bold' ? { bold: true } : f === 'italic' ? { italic: true } : {}
+}
 const onOff = (value: string | undefined, current: boolean): boolean =>
   value === 'on' ? true : value === 'off' ? false : !current
 

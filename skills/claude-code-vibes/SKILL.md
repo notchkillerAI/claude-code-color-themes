@@ -2,7 +2,7 @@
 name: claude-code-vibes
 description: Set up and personalize the look and feel of Claude Code with the free, open-source Claude Color Themes plugins (209 themes, 27 animated backgrounds, a focus-timer bar, themed spinners, prompt colors, tool cards, message badges, sound packs and a stats panel). Use when the user wants to theme, decorate, customize, or change the colors, background, spinner or sounds of Claude Code itself, or asks for a cozy, retro, synthwave or aesthetic Claude Code setup.
 summary: Tell Claude the vibe you want and it sets up the free Claude Color Themes plugins for Claude Code, then suggests a matching theme, spinner, badges and sounds.
-version: 1.0.0
+version: 1.1.0
 tags: [claude-code, theme, customization, aesthetic, productivity, focus-timer]
 keywords: [claude code theme, customize claude code, claude code colors, claude code background, synthwave theme]
 use_cases:
@@ -18,6 +18,16 @@ Requires: Claude Code, and its `claude` command in a terminal for the install st
 
 Help the user give Claude Code itself a new look using the free, open-source
 Claude Color Themes plugins: github.com/notchkillerAI/claude-code-color-themes
+
+## Where this works
+
+- **Claude Code** on macOS, Windows and Linux. Themes, animated backgrounds and the mouse glow
+  show in the **Claude desktop app**; the bar, spinners, prompt colors, tool cards, badges,
+  sounds and stats also work in the terminal.
+- **Agents that can run commands** (Claude Code itself, or any agent with a terminal on the
+  same computer) can run the install for the user.
+- **Chat apps that can't run commands** (Claude.ai, ChatGPT and similar): give the user the
+  install commands and the desktop app steps below to do themselves.
 
 ## 1. Find out what they want
 
@@ -96,5 +106,6 @@ Typing a command and a few letters shows matching names, so nothing needs memori
   terminal and IDE extensions don't draw themes, but the bar, spinners, prompt colors,
   tool cards, badges, sounds and stats work there too.
 - These change Claude Code only, not the regular Claude chat.
-- Sounds and the spoken voice play on macOS.
+- Sounds and the spoken voice work on macOS, Windows and Linux (Linux needs a sound player such as `paplay` and `spd-say` or `espeak` for the voice).
+- Their own picture can be the background: `/colors wallpaper ~/Pictures/photo.jpg` (jpg, png, gif, bmp, tiff and svg everywhere; webp and heic on macOS and Linux; Linux needs ImageMagick or ffmpeg).
 - Animated scenes can be turned off with `/colors scene off` to save battery.

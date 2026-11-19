@@ -1,9 +1,12 @@
 import { atom, read, update } from 'claude-code'
+import { playWav } from './audio.js'
+import { gradientWallpaper, makeWallpaper } from './wallpaper.js'
+import type { Fit, Look } from './wallpaper.js'
 import { ON_OFF, choices, suggest } from './autocomplete.js'
 import type { Grammar } from './autocomplete.js'
 import type { EngineInterface as Engine, Register, ThemeSetArgs } from 'claude-code'
 
-import type { AutoMode, Prefs } from '../types'
+import type { AutoMode, Prefs, WallpaperState } from '../types'
 import { DEFAULTS } from './defaults.js'
 import { makeColors } from './make-colors.js'
 import { SCENES, SCENE_KINDS, sceneFor, sceneSvg } from './scenes.js'
@@ -46,6 +49,8 @@ const SUBCOMMANDS = [
   { name: 'contrast', description: 'Stronger borders' },
   { name: 'code', description: 'Matching code colors' },
   { name: 'sound', description: 'Sounds on or off' },
+  { name: 'wallpaper', description: 'Your own image or a gradient as the background' },
+  { name: 'font', description: 'Text style for the bar and badges' },
   { name: 'help', description: 'Every command' },
 ]
 
@@ -55,6 +60,7 @@ function grammar(prefs: Prefs): Grammar {
   const listOff = [{ name: 'list', description: 'Show every option' }, { name: 'off', description: 'Turn off' }]
   return {
     first: [...themes, ...saved, ...SUBCOMMANDS],
+    menu: [...SUBCOMMANDS, { name: 'random', description: 'Or type any of the 209 theme names after /colors' }].filter((c, i, all) => all.findIndex(x => x.name === c.name) === i),
     next: {
       scene: [
         { name: 'auto', description: 'Match each theme' },
@@ -71,6 +77,18 @@ function grammar(prefs: Prefs): Grammar {
       contrast: ON_OFF,
       code: ON_OFF,
       sound: ON_OFF,
+      wallpaper: [
+        { name: '~/Pictures/', description: 'Then type the rest of your image path (.jpg .png .webp .heic .svg)' },
+        { name: 'gradient', description: 'A smooth gradient: gradient #ff6b6b #6c5ce7' },
+        { name: 'on', description: 'Show your saved wallpaper again' },
+        { name: 'off', description: 'Back to the animated scene' },
+      ],
+      font: [
+        { name: 'default', description: "The app's normal text" },
+        { name: 'mono', description: 'Monospaced, like code' },
+        { name: 'bold', description: 'Bold' },
+        { name: 'italic', description: 'Italic' },
+      ],
       favorite: themes,
       delete: saved,
     },
@@ -84,6 +102,7 @@ const SPECIAL_TABS = ['Favorites', 'Recent', 'My palettes']
 
 // Kept for the session (and redrawn on change); persisted in $.store.
 const prefsAtom = atom({ plugin: 'color-themes', key: 'prefs' } as const, DEFAULTS, { shape: 'prefs-1' })
+const wallpaperAtom = atom({ plugin: 'color-themes', key: 'wallpaper' } as const, null as WallpaperState | null)
 const tabAtom = atom({ plugin: 'color-themes', key: 'tab' } as const, 'Favorites')
 
 // What the auto timer last applied, so it only repaints on a change.
@@ -106,14 +125,22 @@ function displayName(prefs: Prefs, theme: string): string {
 
 function sceneOf(prefs: Prefs, theme: string): SceneKind | undefined {
   if (prefs.scene === 'off') return prefs.glow ? 'plain' : undefined
+  if (prefs.scene === 'wallpaper') return 'plain'
   if (isSceneKind(prefs.scene)) return prefs.scene
   return sceneFor(theme, hueSatOf(theme)[0])
 }
 
 function sceneLabel(prefs: Prefs): string {
   if (prefs.scene === 'off') return 'off'
+  if (prefs.scene === 'wallpaper') return '🖼️ wallpaper'
   if (isSceneKind(prefs.scene)) return `${SCENES[prefs.scene].emoji} ${prefs.scene}`
   return 'auto'
+}
+
+function hashOf(text: string): string {
+  let h = 0
+  for (let i = 0; i < text.length; i += 7) h = (h * 31 + text.charCodeAt(i)) >>> 0
+  return h.toString(36)
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
@@ -168,17 +195,20 @@ async function apply($: Engine, prefs: Prefs): Promise<string | undefined> {
   const unpainted = problems.find(line => line.startsWith("Desktop won't paint"))
   if (unpainted !== undefined) return unpainted
 
-  const kind = sceneOf(prefs, now.theme)
+  const wall = prefs.scene === 'wallpaper' ? await read($, wallpaperAtom) : null
+  const kind = wall !== null ? undefined : sceneOf(prefs, now.theme)
   const key = HEX.test(now.theme) ? `x${now.theme.slice(1).toLowerCase()}` : now.theme
+  const scene =
+    wall !== null ? `wallpaper--w${hashOf(wall.svg)}--${key}${prefs.glow ? '--g' : ''}` : kind !== undefined ? `${kind}--${key}${prefs.glow ? '--g' : ''}` : undefined
   const look: ThemeSetArgs = {
     colors: theme,
-    ...(kind !== undefined ? { backdrop: { scene: `${kind}--${key}${prefs.glow ? '--g' : ''}` } } : {}),
+    ...(scene !== undefined ? { backdrop: { scene } } : {}),
     ...(now.scheme !== undefined ? { overrideColorScheme: now.scheme } : {}),
   }
   const set = await $.theme.set(look)
   lastApplied = `${now.theme}|${now.scheme ?? ''}`
 
-  const emoji = kind !== undefined ? SCENES[kind].emoji : '🎨'
+  const emoji = wall !== null ? '🖼️' : kind !== undefined ? SCENES[kind].emoji : '🎨'
   const auto = now.why !== undefined ? ` · auto: ${now.why}` : ''
   $.ui.status(set.isDrawn ? `${emoji} ${displayName(prefs, now.theme)}${auto}` : set.reason)
   return undefined
@@ -248,6 +278,10 @@ const HELP = [
   '  /colors contrast on|off    stronger borders',
   '  /colors code on|off        matching code highlighting',
   '  /colors sound on|off       a chime when a long task finishes',
+  '  /colors wallpaper <image path> [soft|sharp] [cover|contain|stretch] [keep]',
+  '  /colors wallpaper gradient #ff6b6b #6c5ce7    a gradient background',
+  '  /colors wallpaper on|off   your wallpaper, or back to the scene',
+  '  /colors font default|mono|bold|italic   text style for the bar and badges',
 ].join('\n')
 
 
@@ -283,6 +317,10 @@ export const register: Register = on => {
     if (stored === undefined && typeof legacy === 'string' && (legacy in THEMES || HEX.test(legacy))) {
       base.theme = legacy
     }
+    const savedWall = await $.store.get('wallpaper')
+    if (savedWall !== null && typeof savedWall === 'object' && typeof (savedWall as WallpaperState).svg === 'string') {
+      await update($, wallpaperAtom, () => savedWall as WallpaperState)
+    }
     const prefs = await update($, prefsAtom, () => base)
     const problem = await apply($, prefs)
     if (problem !== undefined) $.ui.status(problem)
@@ -303,7 +341,7 @@ export const register: Register = on => {
 
   // As each letter is typed after /colors, the list narrows to matching names.
   on('prompt.autocomplete', async ($, e, next) => {
-    if (!/^\s*\/colors\s/.test(e.text)) return next(e)
+    if (!/^\s*\/col/i.test(e.text)) return next(e)
     const prefs = await read($, prefsAtom)
     const mine = suggest(e, 'colors', grammar(prefs))
     if (mine === undefined) return next(e)
@@ -393,8 +431,62 @@ export const register: Register = on => {
       }
       case 'sound': {
         const { prefs: after } = await change($, p => ({ ...p, sound: onOff(arg, p.sound) }))
-        if (after.sound) void $.audio.play({ asset: 'sounds/chime.wav' }).catch(() => undefined)
+        if (after.sound) await playWav($, { asset: 'sounds/chime.wav' })
         return { text: `Finish chime ${after.sound ? 'on' : 'off'}.` }
+      }
+      case 'wallpaper':
+      case 'background':
+      case 'bg': {
+        const words2 = words.slice(1)
+        const low = words2.map(w => w.toLowerCase())
+        if (low.length === 0) {
+          const wall = await read($, wallpaperAtom)
+          return { text: wall !== null ? `Wallpaper: ${wall.source} (${prefs.scene === 'wallpaper' ? 'showing' : 'hidden'}). Use /colors wallpaper on|off, or give an image path.` : 'Give an image: /colors wallpaper ~/Pictures/beach.jpg (or .png .webp .heic .svg), or /colors wallpaper gradient #ff6b6b #6c5ce7' }
+        }
+        if (low[0] === 'off') {
+          await change($, p => ({ ...p, scene: 'auto' }))
+          return { text: 'Wallpaper hidden; back to the animated scene. /colors wallpaper on brings it back.' }
+        }
+        if (low[0] === 'on') {
+          if ((await read($, wallpaperAtom)) === null) return { text: 'No wallpaper saved yet. Give an image path first.' }
+          await change($, p => ({ ...p, scene: 'wallpaper' }))
+          return { text: '🖼️ Wallpaper on.' }
+        }
+        let wall: WallpaperState
+        let keep = false
+        try {
+          if (low[0] === 'gradient') {
+            const colors = words2.slice(1).filter(w => /^#?[0-9a-f]{6}$/i.test(w)).map(w => (w.startsWith('#') ? w : `#${w}`).toLowerCase())
+            if (colors.length < 2 || colors.length > 4) return { text: 'Give 2 to 4 colors: /colors wallpaper gradient #ff6b6b #6c5ce7' }
+            wall = gradientWallpaper(colors)
+          } else {
+            const options = new Set(['soft', 'sharp', 'cover', 'contain', 'stretch', 'keep'])
+            const parts = [...words2]
+            const chosen: string[] = []
+            while (parts.length > 1 && options.has((parts[parts.length - 1] ?? '').toLowerCase())) chosen.push((parts.pop() ?? '').toLowerCase())
+            keep = chosen.includes('keep')
+            const look: Look = chosen.includes('sharp') ? 'sharp' : 'soft'
+            const fit: Fit = chosen.includes('contain') ? 'contain' : chosen.includes('stretch') ? 'stretch' : 'cover'
+            $.ui.toast('🖼️ Making your wallpaper…')
+            wall = await makeWallpaper($, parts.join(' '), look, fit)
+          }
+        } catch (err) {
+          return { text: `Couldn't make that wallpaper: ${err instanceof Error ? err.message : String(err)}` }
+        }
+        await $.store.set('wallpaper', wall)
+        await update($, wallpaperAtom, () => wall)
+        const themed = keep ? prefs.theme : wall.color
+        const result = await change($, p => ({ ...p, scene: 'wallpaper', ...(keep ? {} : { previous: p.theme, theme: themed, auto: 'off' as const }) }))
+        if (result.problem !== undefined) return { text: `Wallpaper saved, but the matching colors couldn't be painted: ${result.problem}` }
+        return {
+          text: `🖼️ Wallpaper set from ${wall.source}${keep ? '' : `, with colors matched to it (${themed})`}. Keep your theme next time with "keep" at the end. /colors wallpaper off returns to the animated scene.`,
+        }
+      }
+      case 'font': {
+        const style = arg ?? 'default'
+        if (!['default', 'mono', 'bold', 'italic'].includes(style)) return { text: 'Fonts: default, mono, bold, italic. (The Claude app\'s own text font can\'t be changed by plugins.)' }
+        await change($, p => ({ ...p, font: style }))
+        return { text: `Bar and badge text: ${style}.` }
       }
       case 'auto': {
         const mode = (arg ?? cycle(AUTO_MODES, prefs.auto)) as AutoMode
@@ -426,10 +518,26 @@ export const register: Register = on => {
   })
 
   // The animated scene behind the conversation.
-  on('ui.render', { component: 'Backdrop' }, ($, e, next) => {
+  on('ui.render', { component: 'Backdrop' }, async ($, e, next) => {
     if (e.surface !== 'desktop' && e.surface !== 'mobile') return next(e)
     if (e.props.plugin !== PLUGIN) return next(e)
     const [kind, key, glow] = e.props.scene.split('--')
+    if (kind === 'wallpaper') {
+      const wall = await read($, wallpaperAtom)
+      const themeKey = e.props.scene.split('--')[2] ?? ''
+      if (wall === null) return next(e)
+      const { Svg, Shader } = $.ui.resolve(e)
+      const art = <Svg source={wall.svg} alt="Your wallpaper" />
+      if (e.props.scene.endsWith('--g') && e.surface === 'desktop') {
+        const tint = paletteFor(/^x[0-9a-f]{6}$/.test(themeKey) ? `#${themeKey.slice(1)}` : themeKey).glow
+        return (
+          <Shader module="./glow.ts" values={hexToRgb(tint)}>
+            {art}
+          </Shader>
+        )
+      }
+      return art
+    }
     if (kind === undefined || key === undefined || !isSceneKind(kind)) return next(e)
     const theme = /^x[0-9a-f]{6}$/.test(key) ? `#${key.slice(1)}` : key
     const palette = paletteFor(theme)

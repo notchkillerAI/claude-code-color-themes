@@ -2,7 +2,7 @@
 name: animated-svg-backgrounds
 description: Generate lightweight animated SVG backgrounds and GitHub README banners (falling petals, shooting stars, synthwave grid, mesh gradient, aurora, code rain, lava lamp and 20 more scenes) tinted to any color. Use when the user wants an animated banner, hero image, README header, website background, or a moving decorative SVG.
 summary: 27 animated SVG banners and backgrounds for READMEs and websites, tinted to any color, with an optional title. Pure SVG and CSS, no JavaScript, usually under 20 KB.
-version: 1.0.0
+version: 1.1.0
 tags: [svg, animation, readme, banner, background, design, github, synthwave]
 keywords: [animated banner, readme header, svg background, hero image, animated svg, github readme banner]
 use_cases:
@@ -17,14 +17,37 @@ docs_url: https://github.com/notchkillerAI/claude-code-color-themes
 Requires: Node.js 18 or newer.
 
 **Before running a script,** check Node.js with `node --version`. If it's missing or
-older than 18, tell the user to install the LTS version from https://nodejs.org (or
-`brew install node` on a Mac) and stop there; don't try other ways to run the script.
-Output folders are created automatically.
+older than 18, tell the user they can install the LTS version from https://nodejs.org
+(`brew install node` on a Mac, `winget install OpenJS.NodeJS.LTS` on Windows, or their
+package manager on Linux), and meanwhile use the ready-made files described under
+"If you can't run commands". Output folders are created automatically.
 
 Make animated, pure-SVG backgrounds and banners with one command. Every scene is
 tinted from a single color, animates with plain CSS (no JavaScript), is usually
 under 20 KB, and shows a finished still image when the viewer has reduced motion
 turned on. The result plays inside GitHub READMEs, `<img>` tags and CSS backgrounds.
+
+## Where this works
+
+| Where | What happens |
+| --- | --- |
+| **Agents that can run commands**: Claude Code, Codex CLI, Gemini CLI, Cursor (agent mode), VS Code with Copilot agent mode, Cline, Kiro, OpenClaw and similar | Full skill: runs the script with any color, size and option, and saves the file into the project |
+| **Chat apps that can't run commands**: Claude.ai, ChatGPT, Grok, DeepSeek and similar | Uses the ready-made files in `references/` instead (see below) |
+| **Operating systems** | macOS, Windows and Linux: the scripts are plain Node.js. In PowerShell the same commands work as written. |
+
+## If you can't run commands
+
+Use the finished scenes in `references/`: one animated SVG per scene (`references/petals.svg`,
+`references/shootingstars.svg` and so on, all 27), already tinted with a color that suits it
+and following the viewer's light or dark mode. Load the one that fits, then give it to the
+user as an `.svg` file or code block with these steps: save it as `banner.svg`, then add
+`<img src="banner.svg" alt="…" width="100%">` to the README or page.
+
+- To add a title, insert before the final `</svg>`:
+  `<text x="120" y="560" font-size="96" font-weight="800" fill="#ffffff" font-family="Helvetica,Arial,sans-serif">Title</text>`
+- To recolor, replace the main hex colors in the file with the user's color and lighter or
+  darker versions of it. For exact tints, any size, or light and dark only, suggest an agent
+  that can run commands.
 
 ## The scripts
 

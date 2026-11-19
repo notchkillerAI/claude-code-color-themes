@@ -13,7 +13,7 @@
     {
       "name": "color-themes",
       "source": "./plugins/color-themes",
-      "description": "209 color themes with animated scenes, a mouse glow, a picker panel, auto themes and custom colors (/colors)"
+      "description": "209 color themes with animated scenes, your own image or gradient as wallpaper, a mouse glow, a picker panel, auto themes and custom colors (/colors)"
     },
     {
       "name": "ambient-bar",

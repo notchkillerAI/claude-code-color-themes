@@ -10,6 +10,8 @@ export type Grammar = {
   first: Choice[]
   /** What can follow a given first word. */
   next?: Record<string, Choice[]>
+  /** The menu shown while the command itself is typed (`/col…`); `first` when absent. */
+  menu?: Choice[]
 }
 
 const LIMIT = 24
@@ -35,6 +37,15 @@ export function rank(choices: Choice[], typed: string): Choice[] {
 /** Rows for the token being typed after `/command`, or undefined when it isn't that command. */
 export function suggest(e: PromptAutocompleteInput, command: string, grammar: Grammar): PromptAutocompleteSuggestion[] | undefined {
   const before = e.text.slice(0, e.start)
+  // Typing the command itself (`/co`, `/colors`): show the whole menu, each row
+  // filling in `/colors <choice> `, so the list pops up like a search box.
+  if (before.trim() === '' && e.token.startsWith('/') && e.token.length >= 3 && `/${command}`.startsWith(e.token.toLowerCase())) {
+    return (grammar.menu ?? grammar.first).map(c => ({
+      text: `/${command} ${c.name}`,
+      label: `/${command} ${c.name}`,
+      ...(c.description !== undefined ? { description: c.description } : {}),
+    }))
+  }
   const m = new RegExp(`^\\s*/${command}\\s+(.*)$`, 's').exec(before)
   if (m === null) return undefined
   const words = (m[1] ?? '').trim().split(/\s+/).filter(w => w !== '')

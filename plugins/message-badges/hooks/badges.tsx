@@ -94,6 +94,11 @@ export const BADGE_COLORS: Record<string, [string, string]> = {
   matrix: ['#7dff9a', '#00ff41'],
 }
 
+/** Text style for the plugin's own text: the app's own font can't be changed. */
+function fontOf(prefs: Prefs): { mono?: boolean; bold?: boolean; italic?: boolean } {
+  const f = (prefs as Prefs & { font?: string }).font
+  return f === 'mono' ? { mono: true } : f === 'bold' ? { bold: true } : f === 'italic' ? { italic: true } : {}
+}
 /** What the current theme offers the badges: its scene's emoji and two colors. */
 export type ThemeBadge = { emoji: string; you: string; claude: string }
 
@@ -142,7 +147,7 @@ export function registerBadges(on: On, themed: (prefs: Prefs) => ThemeBadge | un
         ) : badge.look === 'outline' ? (
           <Text color={badge.youColor} italic underline>{badge.you}</Text>
         ) : (
-          <Text color={badge.youColor} bold>{badge.you}</Text>
+          <Text color={badge.youColor} bold {...fontOf(prefs)}>{badge.you}</Text>
         )}
         {row}
       </Box>
@@ -162,7 +167,7 @@ export function registerBadges(on: On, themed: (prefs: Prefs) => ThemeBadge | un
         ) : badge.look === 'outline' ? (
           <Text color={badge.claudeColor} italic underline>{badge.claude}</Text>
         ) : (
-          <Text color={badge.claudeColor} bold>{badge.claude}</Text>
+          <Text color={badge.claudeColor} bold {...fontOf(prefs)}>{badge.claude}</Text>
         )}
         {row}
       </Box>
