@@ -60,6 +60,6 @@ export type FocusTimer = {
 
 declare module 'claude-code' {
   interface PluginState {
-    'olive-theme': { prefs: Shaped<Prefs>; tab: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats; wallpaper: WallpaperState | null }
+    'olive-theme': { prefs: Shaped<Prefs>; tab: string; query: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats; wallpaper: WallpaperState | null }
   }
 }

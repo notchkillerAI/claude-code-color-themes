@@ -60,6 +60,6 @@ export type FocusTimer = {
 
 declare module 'claude-code' {
   interface PluginState {
-    'smart-menu': { prefs: Shaped<Prefs>; tab: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats; wallpaper: WallpaperState | null }
+    'smart-menu': { prefs: Shaped<Prefs>; tab: string; query: string; timer: FocusTimer; now: number; quoteShift: number; stats: SessionStats; wallpaper: WallpaperState | null }
   }
 }

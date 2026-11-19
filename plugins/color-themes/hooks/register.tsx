@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import { playWav } from './audio.js'
 import { gradientWallpaper, makeWallpaper } from './wallpaper.js'
 import type { Fit, Look } from './wallpaper.js'
-import { ON_OFF, choices, suggest } from './autocomplete.js'
+import { ON_OFF, choices, rank, suggest } from './autocomplete.js'
 import type { Grammar } from './autocomplete.js'
 import type { EngineInterface as Engine, Register, ThemeSetArgs } from 'claude-code'
 
@@ -103,6 +103,7 @@ const SPECIAL_TABS = ['Favorites', 'Recent', 'My palettes']
 // Kept for the session (and redrawn on change); persisted in $.store.
 const prefsAtom = atom({ plugin: 'color-themes', key: 'prefs' } as const, DEFAULTS, { shape: 'prefs-1' })
 const wallpaperAtom = atom({ plugin: 'color-themes', key: 'wallpaper' } as const, null as WallpaperState | null)
+const queryAtom = atom({ plugin: 'color-themes', key: 'query' } as const, '')
 const tabAtom = atom({ plugin: 'color-themes', key: 'tab' } as const, 'Favorites')
 
 // What the auto timer last applied, so it only repaints on a change.
@@ -138,9 +139,9 @@ function sceneLabel(prefs: Prefs): string {
 }
 
 function hashOf(text: string): string {
-  let h = 0
-  for (let i = 0; i < text.length; i += 7) h = (h * 31 + text.charCodeAt(i)) >>> 0
-  return h.toString(36)
+  let acc = 0
+  for (let i = 0; i < text.length; i += 7) acc = (acc * 31 + text.charCodeAt(i)) >>> 0
+  return acc.toString(36)
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
@@ -360,15 +361,20 @@ export const register: Register = on => {
       result.problem !== undefined ? { text: `That couldn't be painted: ${result.problem}` } : { text }
 
     switch (sub) {
-      case '':
+      case '': {
+        // Where a panel can be shown, /colors opens the search panel; elsewhere it lists everything.
+        await update($, queryAtom, () => '')
+        const opened = await $.ui.open({ id: PANE, title: '🎨 Color themes', focus: true })
+        return opened.isPlaced ? { text: '🔎 Search panel open: type to filter themes, scenes and settings. /colors help lists every command.' } : { text: listing(prefs) }
+      }
       case 'list':
       case 'help':
         return { text: listing(prefs) }
       case 'panel':
       case 'open':
       case 'picker': {
-        const opened = await $.ui.open({ id: PANE, title: '🎨 Color themes' })
-        return { text: opened.isPlaced ? 'Theme picker opened.' : 'The picker panel opens in the desktop app or a fullscreen terminal.' }
+        const opened = await $.ui.open({ id: PANE, title: '🎨 Color themes', focus: true })
+        return { text: opened.isPlaced ? 'Theme picker opened. Type in its search box to filter.' : 'The picker panel opens in the desktop app or a fullscreen terminal.' }
       }
       case 'random': {
         const theme = randomOther(prefs.theme)
@@ -555,9 +561,52 @@ export const register: Register = on => {
 
   // The theme picker panel.
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
-    const { Box, Text, Button } = $.ui.resolve(e)
+    const { Box, Text, Button, Input } = $.ui.resolve(e)
     const prefs = await read($, prefsAtom)
     const tab = await read($, tabAtom)
+    const query = (await read($, queryAtom)).trim()
+
+    // Search: one list of themes, your palettes, scenes and settings, narrowed as you type.
+    type Hit = { name: string; description: string; run: () => void }
+    const hits: Hit[] = []
+    if (query !== '') {
+      const themes = rank(themeChoices(), query).slice(0, 30)
+      for (const t of themes) hits.push({ name: t.name, description: `${t.description ?? ''}`, run: () => void choose($, t.name) })
+      for (const [name, hex] of Object.entries(prefs.saved)) {
+        if (name.toLowerCase().includes(query.toLowerCase())) hits.push({ name, description: `your palette ${hex}`, run: () => void choose($, hex) })
+      }
+      for (const k of rank(SCENE_KINDS.filter(x => x !== 'plain').map(x => ({ name: x, description: SCENES[x].label })), query).slice(0, 8)) {
+        hits.push({ name: `scene: ${k.name}`, description: `${SCENES[k.name as SceneKind].emoji} ${k.description ?? ''}`, run: () => void change($, p => ({ ...p, scene: k.name })) })
+      }
+      for (const c of rank(SUBCOMMANDS, query).slice(0, 8)) {
+        hits.push({ name: `/colors ${c.name}`, description: c.description ?? '', run: () => void $.prompt.fill({ text: `/colors ${c.name} `, mode: 'replace' }) })
+      }
+    }
+    const search = (
+      <Input
+        key="search"
+        placeholder="🔎 Search 209 themes, scenes and settings…"
+        autoFocus
+        submitLabel="pick first"
+        onInput={value => void update($, queryAtom, () => value)}
+        onSubmit={() => hits[0]?.run()}
+      />
+    )
+    if (query !== '') {
+      return (
+        <Box flexDirection="column" gap={1}>
+          {search}
+          <Text dimColor>{hits.length === 0 ? `Nothing matches "${query}".` : `${String(hits.length)} matches for "${query}". Enter picks the first.`}</Text>
+          <Box flexDirection="column">
+            {hits.map((hit, i) => (
+              <Button key={`hit-${String(i)}-${hit.name}`} plain onPress={() => hit.run()}>
+                {hit.name} <Text dimColor>{hit.description}</Text>
+              </Button>
+            ))}
+          </Box>
+        </Box>
+      )
+    }
     const tabs = [...SPECIAL_TABS, ...Object.keys(GROUPS)]
     const list =
       tab === 'Favorites'
@@ -576,6 +625,7 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column" gap={1}>
+        {search}
         <Box flexDirection="column">
           <Text bold>
             {kind !== undefined ? SCENES[kind].emoji : '🎨'} {displayName(prefs, prefs.theme)}

@@ -102,10 +102,10 @@ function clockText(ms: number, offsetMin: number, hour12: boolean): string {
 }
 
 function greeting(ms: number, offsetMin: number): string {
-  const h = local(ms, offsetMin).h
-  if (h >= 5 && h < 12) return '☀️ Good morning'
-  if (h >= 12 && h < 17) return '🌤️ Good afternoon'
-  if (h >= 17 && h < 22) return '🌆 Good evening'
+  const hour = local(ms, offsetMin).h
+  if (hour >= 5 && hour < 12) return '☀️ Good morning'
+  if (hour >= 12 && hour < 17) return '🌤️ Good afternoon'
+  if (hour >= 17 && hour < 22) return '🌆 Good evening'
   return '🌙 Late night'
 }
 

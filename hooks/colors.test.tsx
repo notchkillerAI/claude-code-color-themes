@@ -388,3 +388,59 @@ test('wallpapers: a gradient is drawn behind everything, and bad files say why',
   expect(app.last()?.backdrop?.scene).toMatch(/^(fireflies|petals|plain)--/)
   expect(await colors($, 'font mono')).toBe('Bar and badge text: mono.')
 })
+
+const PANEL = (surface: 'desktop' | 'terminal' | 'mobile' | 'vscode') => ({
+  plugin: 'olive-theme', component: 'Pane', requestId: 'color-themes', surface,
+  props: { title: 'Color themes', isFocused: true, bodyColumns: 70, placement: 'dock', scroll: { offset: 0, bodyRows: 60 }, view: {} },
+})
+
+test('/colors opens a search panel that narrows as you type, on every surface', async ($, on) => {
+  const app = engine(on)
+  on('ui.toast', () => ({ value: undefined }))
+  on('prompt.fill', (_: unknown, e: any) => ({ isFilled: true, text: e.text, cursor: e.text.length }) as never)
+  await start($)
+  expect(await colors($, '')).toContain('Search panel open')
+  for (const surface of ['desktop', 'terminal', 'mobile', 'vscode'] as const) {
+    const ui = await $.ui.mount(PANEL(surface) as any)
+    expect(await ui.find({ type: 'Button', key: 'random' })).toBeDefined()
+    const count = async () => {
+      const t = (await ui.find({ type: 'Text', text: /matches for|Nothing matches/ }))?.text ?? ''
+      return Number(/^(\d+)/.exec(t)?.[1] ?? 0)
+    }
+    await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 's', kind: 'change', surface })
+    const s = await count()
+    await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'sa', kind: 'change', surface })
+    const sa = await count()
+    await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'sak', kind: 'change', surface })
+    const sak = await count()
+    expect(s).toBeGreaterThan(sa)
+    expect(sa).toBeGreaterThan(sak)
+    expect(sak).toBeGreaterThan(0)
+    await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'sak', kind: 'submit', surface })
+    expect(app.last()?.colors?.label).toBe('Sakura')
+    await $.ui.input({ plugin: 'olive-theme', key: 'search', text: '', kind: 'change', surface })
+    await ui.unmount()
+  }
+})
+
+test('search finds scenes and settings too', async ($, on) => {
+  const app = engine(on)
+  const filled: string[] = []
+  on('prompt.fill', (_: unknown, e: any) => {
+    filled.push(e.text)
+    return { isFilled: true, text: e.text, cursor: e.text.length } as never
+  })
+  await start($)
+  const ui = await $.ui.mount(PANEL('desktop') as any)
+  await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'psych', kind: 'change' })
+  expect(await ui.find({ type: 'Button', text: /scene: psychflow/ })).toBeDefined()
+  await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'wallp', kind: 'change' })
+  const row = await ui.find({ type: 'Button', text: /\/colors wallpaper/ })
+  expect(row).toBeDefined()
+  await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'wallp', kind: 'submit' })
+  expect(filled).toContain('/colors wallpaper ')
+  await $.ui.input({ plugin: 'olive-theme', key: 'search', text: 'zzzz', kind: 'change' })
+  expect((await ui.find({ type: 'Text', text: /Nothing matches/ }))?.text).toBe('Nothing matches "zzzz".')
+  await ui.unmount()
+  void app
+})

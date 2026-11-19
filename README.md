@@ -137,7 +137,11 @@ Every theme comes with a slow, animated background scene behind the conversation
 | **🧋 Sweets & drinks** | <img src="assets/sweets-drinks.svg" width="100%"> |
 | **✈️ Places & journeys** | <img src="assets/places-journeys.svg" width="100%"> |
 
-### ⌨️ Type-ahead: no names to memorise
+### 🔎 Search: no names to memorise
+
+Type **`/colors`** and press Enter: a **search panel** opens with the cursor in its search box. Type a letter and the list of themes, your palettes, scenes and settings shrinks with every letter. Click a result, or press **Enter** to pick the first one. This works in the Claude desktop app, which is where themes show.
+
+### ⌨️ Type-ahead in the terminal
 
 Start typing `/col` and the **whole menu pops up** like a search box: every customization (`/colors panel`, `/colors wallpaper`, `/colors scene`, `/colors spinner`, `/colors focus`…) with a one-line hint. Pick one, or keep typing: the list narrows **with every letter** to the names that contain it:
 
