@@ -21,6 +21,7 @@
   <a href="#-themes">Themes</a> •
   <a href="#-custom-colors">Custom colours</a> •
   <a href="#-more-customization">More customization</a> •
+  <a href="#-claude-code-skills">Skills</a> •
   <a href="#-every-theme">Every theme</a> •
   <a href="#%EF%B8%8F-limitations">Limitations</a>
 </p>
@@ -196,6 +197,18 @@ Each of these is its own plugin, and is also included in the all-in-one `olive-t
 - **Sound packs:** chime, bells, marimba, arcade, coin, levelup, synthwave, dreamy, harp, zen, bubbles, piano, doorbell, sparkle, robot, lofi, space, kalimba, pop, victory, ocean, retro, gentle, jazz, wind (plus `classic`)
 
 </details>
+
+## 🧠 Claude Code skills
+
+Three free [skills](skills/) that teach Claude Code new jobs. Just ask in plain words:
+
+| Skill | Ask | |
+| --- | --- | --- |
+| 🌠 **Animated SVG Backgrounds** | "Add an animated synthwave banner titled 'My App' to my README." | The 27 scenes above as tiny SVG banners and backgrounds for your own READMEs and sites |
+| 🎨 **Color Palette Studio** | "Make a light and dark palette from #6c5ce7 for my Tailwind project." | Readable light and dark UI palettes, with CSS, Tailwind, SCSS or JSON output |
+| ✨ **Claude Code Vibes** | "Make my Claude Code look retro synthwave." | Installs these plugins and picks a matching theme, spinner, badges and sounds |
+
+They come **built into the all-in-one `olive-theme` plugin**. Otherwise copy them into `~/.claude/skills/` (see [skills/README.md](skills/README.md)), or use them for free on [Agensi](https://www.agensi.io).
 
 ## 📋 Every theme
 

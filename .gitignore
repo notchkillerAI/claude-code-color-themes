@@ -1,0 +1,4 @@
+# Agensi upload files: kept locally, not published
+skills/*.zip
+skills/LISTING.md
+skills/listing-images/
