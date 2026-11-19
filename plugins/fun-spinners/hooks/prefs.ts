@@ -19,7 +19,7 @@ export function hash(s: string): number {
   return h
 }
 
-type PickKey = 'spinner' | 'prompt' | 'cards' | 'badges' | 'sounds'
+type PickKey = 'spinner' | 'prompt' | 'cards' | 'badges' | 'badgeColors' | 'sounds'
 
 /** Sets one style by name, cycles to the next with no name, or lists them. */
 export async function pickFrom(

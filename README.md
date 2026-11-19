@@ -51,7 +51,7 @@ Answer `y` to add the marketplace, then press **Enter** to install for your user
 | ⏳ Fun spinners<br><code>fun-spinners</code> | 27 themed "thinking" spinners | `/spinner coffee` |
 | ⌨️ Prompt colors<br><code>prompt-colors</code> | 24 styles that colour `/commands`, `@files`, links and TODOs as you type | `/prompt-colors neon` |
 | 🧰 Tool cards<br><code>tool-cards</code> | 22 card styles around each tool step, with icons, status and test-result bars | `/tool-cards neon` |
-| 💬 Message badges<br><code>message-badges</code> | 22 badge styles above your messages and Claude's replies | `/badges space` |
+| 💬 Message badges<br><code>message-badges</code> | 48 badge designs and 22 colour sets, or `auto` to match your theme | `/badges kawaii` |
 | 🔔 Sound packs<br><code>sound-packs</code> | 25 sound packs for done / error / question, plus a spoken "All done!" | `/sounds arcade` |
 | 📈 Session stats<br><code>session-stats</code> | A dashboard: time, turns, tools, files changed, context and cost | `/session-stats` |
 | 🖱️ Smart menu<br><code>smart-menu</code> | Right-click: Explain, Find bugs, Improve, Explain simply, Make a theme from a colour | right-click selected text |
@@ -134,6 +134,18 @@ Every theme comes with a slow, animated background scene behind the conversation
 | **🧋 Sweets & drinks** | <img src="assets/sweets-drinks.svg" width="100%"> |
 | **✈️ Places & journeys** | <img src="assets/places-journeys.svg" width="100%"> |
 
+### ⌨️ Type-ahead: no names to memorise
+
+Type `/colors ` and start typing. The suggestion list narrows **with every letter** to the names that contain it, each with a hint:
+
+```
+/colors s     →  sakura · sahara · santorini · shooting-star · seafoam · scene · surprise …
+/colors sa    →  sahara · sakura · santorini · savanna · …
+/colors sak   →  sakura   🌸 Nature escapes · falling petals
+```
+
+It works for every option, not just themes: `/colors scene psy` → `psychflow`, `/colors spinner co` → `coffee`, `cooking`, `/colors badges pi` → `pill`, `pill-icons`, `neon-pill`. Every separate plugin completes its own command too (`/spinner`, `/bar`, `/badges`, `/sounds`…). Press **Tab** or click to fill one in.
+
 ### Theme commands
 
 | Command | What it does |
@@ -168,7 +180,7 @@ Each of these is its own plugin, and is also included in the all-in-one `olive-t
 | ⏳ **Spinners** (27) | `/spinner coffee` | `/colors spinner coffee` | *Brewing ☕* · *Wishing 🌠* · *Swirling 🌀* · *Leveling up 🎮* |
 | ⌨️ **Prompt colors** (24) | `/prompt-colors neon` | `/colors prompt neon` | `/commands`, `@files`, `app.py`, links, `TODO`, numbers each in their own colour |
 | 🧰 **Tool cards** (22) | `/tool-cards neon` | `/colors cards neon` | `╭ 💻 Bash  ✓ done ╮` with a `██████████░ 18/20 passed` test bar |
-| 💬 **Message badges** (22) | `/badges space` | `/colors badges space` | `👩‍🚀 You` · `🛸 Claude` |
+| 💬 **Message badges** (48 designs × 22 colour sets) | `/badges kawaii` · `/badges colors sunset` | `/colors badges kawaii` · `/colors badge-colors sunset` | `👩‍🚀 You` · `🛸 Claude`, pills like ` YOU ` / ` CLAUDE `, or `auto`: your theme's own emoji and colours |
 | 🔔 **Sound packs** (25) | `/sounds arcade` · `/sounds voice on` | `/colors sounds arcade` · `/colors voice on` | Different sounds for done, error and question; your Mac can say "All done!" |
 | 📈 **Session stats** | `/session-stats` | `/colors stats` | Time, turns, tool bar chart, files changed, context %, cost |
 | 🖱️ **Smart menu** | right-click selected text | right-click | 💡 Explain · 🐞 Find bugs · ✨ Improve · 🧒 Explain simply · 🎨 Make a theme |
@@ -179,7 +191,8 @@ Each of these is its own plugin, and is also included in the all-in-one `olive-t
 - **Spinners:** sparkle, coffee, tea, space, synthwave, psych, shootingstar, ocean, forest, sakura, autumn, winter, baking, cooking, music, lofi, gaming, magic, robot, science, cat, dog, ninja, pirate, garden, zen, dots (or `auto` to match your theme)
 - **Prompt colors:** neon, pastel, synthwave, ocean, forest, sunset, candy, dracula, nord, monokai, solar, gruvbox, matrix, sakura, autumn, ice, gold, cyber, lavender, citrus, mono, retro, vapor, earth
 - **Tool cards:** soft, neon, ocean, forest, sunset, lavender, gold, mint, cherry, ice, boxy, double, bold, classic, terminal, synthwave, dracula, nord, gruvbox, cyber, minimal, emoji
-- **Message badges:** classic, sparkle, space, synthwave, chat, cozy, nature, ocean, sakura, cats, gaming, music, magic, robots, royal, minimal, arrows, brackets, hearts, weather, food, sports
+- **Message badge designs:** auto (matches your theme), classic, sparkle, space, synthwave, chat, cozy, nature, ocean, sakura, cats, gaming, music, magic, robots, royal, minimal, arrows, brackets, hearts, weather, food, sports, stars, diamonds, moon, planets, flowers, fruit, boba, crystal, fire, surf, retro, terminal, kawaii, spooky, fantasy, sparkles, rocket, wizard, and pills: pill, pill-icons, neon-pill, sakura-pill, mint-pill, sunset-pill, plus underline and italic-serif
+- **Message badge colours:** auto (your theme's colours), design (each design's own), neon, pastel, synthwave, ocean, forest, sunset, candy, lavender, gold, ice, cherry, mint, dracula, nord, gruvbox, monokai, cyber, vapor, autumn, earth, mono, matrix
 - **Sound packs:** chime, bells, marimba, arcade, coin, levelup, synthwave, dreamy, harp, zen, bubbles, piano, doorbell, sparkle, robot, lofi, space, kalimba, pop, victory, ocean, retro, gentle, jazz, wind (plus `classic`)
 
 </details>
@@ -490,6 +503,8 @@ Good to know before you install:
 - **Install one way, not both.** Installing `olive-theme` and a separate plugin together shows that feature twice.
 - **Settings are per plugin.** The separate plugins each remember their own settings; they don't share them with `olive-theme`.
 - **The mouse glow is desktop-app only**, and scenes stand still if your Mac has **Reduce Motion** turned on.
+- **The app may pause a scene** if your computer can't animate it smoothly. Scenes are kept light, but on a slower machine try a simpler scene (`/colors scene stars`) or `/colors glow off`.
+- **Type-ahead** suggestions appear below Claude Code's own and need at least one letter typed after the command.
 - **Animated scenes use a little GPU and battery.** Turn them off any time with `/colors scene off`.
 - **Some parts keep Claude's own look:** permission prompts, and the desktop app's step descriptions in the spinner (it adds the icon instead).
 - **Code highlighting styles** depend on what the app offers. If it doesn't know one, it keeps its usual code colours.

@@ -159,7 +159,7 @@ function snow(p: Palette): string {
   return falling(
     p,
     37,
-    90,
+    60,
     r => `<circle r="${n(1.5 + r() * 3.5)}" fill="${flake}" stroke="${p.accent}" stroke-opacity=".25" stroke-width=".6"/>`,
     [14, 34],
     40,
@@ -171,7 +171,7 @@ function rain(p: Palette): string {
   return falling(
     p,
     41,
-    110,
+    70,
     r => `<path d="M0 0 l-6 ${n(26 + r() * 22)}" stroke="${p.glow}" stroke-opacity=".5" stroke-width="1.4" stroke-linecap="round"/>`,
     [2.4, 4.2],
     20,
@@ -179,16 +179,20 @@ function rain(p: Palette): string {
   )
 }
 
-const TWINKLE = `@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}.s{animation:tw ease-in-out infinite}`
+const TWINKLE =
+  `@keyframes tw{0%,100%{opacity:.3}50%{opacity:1}}` +
+  `.t0{animation:tw 4s ease-in-out infinite}.t1{animation:tw 5.5s ease-in-out infinite -1.5s}` +
+  `.t2{animation:tw 7s ease-in-out infinite -3s}.t3{animation:tw 9s ease-in-out infinite -5s}`
 
+/** Stars in four groups that twinkle out of step: four animations, not one per star. */
 function starField(p: Palette, seed: number, count: number): string {
   const r = seeded(seed)
-  let body = ''
+  const groups = ['', '', '', '']
   for (let i = 0; i < count; i++) {
     const big = r() > 0.9
-    body += `<circle class="s" cx="${n(r() * W)}" cy="${n(r() * H)}" r="${n(big ? 1.8 + r() * 1.4 : 0.6 + r() * 1.1)}" fill="${big ? p.glow : hsl(p.hue, 25, 88)}" style="animation-duration:${n(3 + r() * 6)}s;animation-delay:${n(-r() * 9)}s"/>`
+    groups[i % 4] += `<circle cx="${n(r() * W)}" cy="${n(r() * H)}" r="${n(big ? 1.8 + r() * 1.4 : 0.6 + r() * 1.1)}" fill="${big ? p.glow : hsl(p.hue, 25, 88)}"/>`
   }
-  return body
+  return groups.map((g, k) => `<g class="t${k}">${g}</g>`).join('')
 }
 
 function stars(p: Palette): string {
@@ -210,7 +214,6 @@ function aurora(p: Palette): string {
   const c2 = hsl((p.hue + 50) % 360, 70, 60)
   const c3 = hsl((p.hue + 300) % 360, 60, 62)
   const defs =
-    `<filter id="blur" filterUnits="userSpaceOnUse" x="-300" y="-300" width="2200" height="1100"><feGaussianBlur stdDeviation="38"/></filter>` +
     `<linearGradient id="a1" x1="0" x2="1"><stop offset="0" stop-color="${c1}" stop-opacity="0"/><stop offset=".5" stop-color="${c1}"/><stop offset="1" stop-color="${c2}" stop-opacity="0"/></linearGradient>` +
     `<linearGradient id="a2" x1="0" x2="1"><stop offset="0" stop-color="${c3}" stop-opacity="0"/><stop offset=".5" stop-color="${c2}"/><stop offset="1" stop-color="${c1}" stop-opacity="0"/></linearGradient>`
   const style =
@@ -218,7 +221,8 @@ function aurora(p: Palette): string {
     `@keyframes glowp{0%,100%{opacity:.35}50%{opacity:.75}}` +
     `.band{animation:sway ease-in-out infinite,glowp ease-in-out infinite;transform-box:fill-box;transform-origin:center}`
   const band = (d: string, fill: string, dur: number, delay: number) =>
-    `<path class="band" filter="url(#blur)" d="${d}" fill="none" stroke="url(#${fill})" stroke-width="120" style="animation-duration:${dur}s,${dur * 0.7}s;animation-delay:${delay}s" opacity=".5"/>`
+    `<g class="band" style="animation-duration:${dur}s,${dur * 0.7}s;animation-delay:${delay}s" fill="none" stroke="url(#${fill})" stroke-linecap="round">` +
+    [300, 230, 170, 120, 75, 35].map((w, k) => `<path d="${d}" stroke-width="${w}" opacity="${n(0.05 + k * 0.035)}"/>`).join('') + `</g>`
   const body =
     `<g class="lo">` +
     band('M-100 260 C300 120 600 380 900 220 S1500 120 1700 260', 'a1', 26, -3) +
@@ -274,7 +278,7 @@ function sunset(p: Palette): string {
   const defs =
     `<radialGradient id="sun"><stop offset="0" stop-color="${sun}"/><stop offset=".45" stop-color="${sun}" stop-opacity=".6"/><stop offset="1" stop-color="${sun}" stop-opacity="0"/></radialGradient>` +
     `<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky}" stop-opacity=".45"/><stop offset=".6" stop-color="${p.glow}" stop-opacity=".12"/><stop offset="1" stop-color="${p.glow}" stop-opacity="0"/></linearGradient>` +
-    `<filter id="soft" filterUnits="userSpaceOnUse" x="-800" y="-200" width="3200" height="800"><feGaussianBlur stdDeviation="14"/></filter>`
+    `<radialGradient id="soft"><stop offset="0" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}"/><stop offset=".6" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}" stop-opacity=".7"/><stop offset="1" stop-color="${hsl((p.hue + 340) % 360, 60, 85)}" stop-opacity="0"/></radialGradient>`
   const style =
     `@keyframes cloud{from{transform:translateX(-500px)}to{transform:translateX(${W + 500}px)}}` +
     `@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}` +
@@ -285,7 +289,7 @@ function sunset(p: Palette): string {
     const dur = n(90 + r() * 80)
     const y = n(60 + r() * 260)
     const s = 0.7 + r() * 0.8
-    clouds += `<g transform="translate(${n(r() * W - 600)},0)"><g class="c" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s" filter="url(#soft)" fill="${hsl((p.hue + 340) % 360, 60, 85)}" opacity=".55"><ellipse cx="0" cy="${y}" rx="${n(150 * s)}" ry="${n(34 * s)}"/><ellipse cx="${n(70 * s)}" cy="${n(y - 20 * s)}" rx="${n(90 * s)}" ry="${n(30 * s)}"/></g></g>`
+    clouds += `<g transform="translate(${n(r() * W - 600)},0)"><g class="c" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s" fill="url(#soft)" opacity=".6"><ellipse cx="0" cy="${y}" rx="${n(150 * s)}" ry="${n(34 * s)}"/><ellipse cx="${n(70 * s)}" cy="${n(y - 20 * s)}" rx="${n(90 * s)}" ry="${n(30 * s)}"/></g></g>`
   }
   const body =
     `<rect width="${W}" height="${H}" fill="url(#sky)"/>` +
@@ -300,7 +304,7 @@ function bubbles(p: Palette): string {
     `@keyframes rise{from{transform:translate(0,${H}px)}50%{transform:translate(30px,0)}to{transform:translate(0,-${H}px)}}` +
     `.bb{animation:rise linear infinite}`
   let body = '<g class="lo">'
-  for (let i = 0; i < 55; i++) {
+  for (let i = 0; i < 38; i++) {
     const dur = n(16 + r() * 22)
     const rad = n(4 + r() * 18)
     body += `<g transform="translate(${n(r() * W)},${n(r() * H)})"><g class="bb" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"><circle r="${rad}" fill="${p.glow}" fill-opacity=".08" stroke="${p.glow}" stroke-opacity=".55" stroke-width="1.5"/><circle cx="${n(-rad * 0.35)}" cy="${n(-rad * 0.35)}" r="${n(rad * 0.22)}" fill="#ffffff" opacity=".6"/></g></g>`
@@ -395,7 +399,7 @@ function confetti(p: Palette): string {
   return falling(
     p,
     113,
-    80,
+    56,
     (r, i) => {
       const c = tones[i % tones.length]
       return r() > 0.5
@@ -410,20 +414,21 @@ function confetti(p: Palette): string {
 
 function coderain(p: Palette): string {
   const r = seeded(127)
+  const ink = hsl(p.hue, 75, 66)
   const glyphs = '01{}<>/=;:+*#$%&[]()λ∑∆'
   const style =
     `@keyframes drop{from{transform:translateY(-${H}px)}to{transform:translateY(${H}px)}}` +
-    `.col{animation:drop linear infinite;font-family:Menlo,Consolas,monospace;font-size:18px}`
+    `.col{animation:drop linear infinite;font-family:Menlo,Consolas,monospace;font-size:20px;font-weight:bold}`
   let body = '<g class="lo">'
-  for (let c = 0; c < 46; c++) {
-    const x = n(c * (W / 46) + r() * 10)
-    const len = 10 + Math.floor(r() * 16)
+  for (let c = 0; c < 38; c++) {
+    const x = n(c * (W / 38) + r() * 12)
+    const len = 7 + Math.floor(r() * 9)
     const dur = n(7 + r() * 9)
     let spans = ''
     for (let k = 0; k < len; k++) {
       const ch = glyphs[Math.floor(r() * glyphs.length)] ?? '0'
       const head = k === len - 1
-      spans += `<tspan x="${x}" dy="22" fill="${head ? hsl(p.hue, 30, 92) : p.glow}" fill-opacity="${n(head ? 1 : 0.15 + (k / len) * 0.6)}">${ch.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')}</tspan>`
+      spans += `<tspan x="${x}" dy="22" fill="${head ? '#ffffff' : ink}" fill-opacity="${n(head ? 1 : 0.35 + (k / len) * 0.6)}">${ch.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')}</tspan>`
     }
     body += `<text class="col" y="${n(r() * H)}" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s">${spans}</text>`
   }
@@ -458,7 +463,7 @@ function crystals(p: Palette): string {
 function clouds(p: Palette): string {
   const r = seeded(137)
   const tones = [hsl(p.hue, 60, 86), hsl((p.hue + 40) % 360, 55, 84), hsl((p.hue + 320) % 360, 55, 85)]
-  const defs = `<filter id="puff" filterUnits="userSpaceOnUse" x="-800" y="-400" width="3200" height="1800"><feGaussianBlur stdDeviation="30"/></filter>`
+  const defs = tones.map((c, k) => `<radialGradient id="pf${k}"><stop offset="0" stop-color="${c}"/><stop offset=".6" stop-color="${c}" stop-opacity=".7"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')
   const style =
     `@keyframes drift2{from{transform:translateX(-700px)}to{transform:translateX(${W + 700}px)}}` +
     `.cl{animation:drift2 linear infinite}` + TWINKLE
@@ -467,7 +472,7 @@ function clouds(p: Palette): string {
     const dur = n(110 + r() * 90)
     const y = n(r() * H)
     const s = 0.7 + r() * 1.1
-    body += `<g transform="translate(${n(r() * W - 700)},0)"><g class="cl" filter="url(#puff)" fill="${tones[i % 3]}" opacity=".5" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"><ellipse cy="${y}" rx="${n(190 * s)}" ry="${n(60 * s)}"/><ellipse cx="${n(110 * s)}" cy="${n(y - 30 * s)}" rx="${n(120 * s)}" ry="${n(55 * s)}"/></g></g>`
+    body += `<g transform="translate(${n(r() * W - 700)},0)"><g class="cl" fill="url(#pf${i % 3})" opacity=".55" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"><ellipse cy="${y}" rx="${n(190 * s)}" ry="${n(60 * s)}"/><ellipse cx="${n(110 * s)}" cy="${n(y - 30 * s)}" rx="${n(120 * s)}" ry="${n(55 * s)}"/></g></g>`
   }
   body += `<g opacity=".5">${starField({ ...p, glow: hsl(p.hue, 40, 95) }, 139, 40)}</g>`
   return frame(p, style, body + '</g>', defs)
@@ -535,31 +540,31 @@ function shootingstars(p: Palette): string {
 function lavalamp(p: Palette): string {
   const r = seeded(163)
   const tones = [p.glow, hsl((p.hue + 30) % 360, 85, 62), hsl((p.hue + 340) % 360, 80, 58)]
-  const defs = `<filter id="lava" filterUnits="userSpaceOnUse" x="-300" y="-300" width="2200" height="1600"><feGaussianBlur stdDeviation="26"/></filter>`
+  const defs = tones.map((c, k) => `<radialGradient id="lv${k}"><stop offset="0" stop-color="${c}"/><stop offset=".6" stop-color="${c}" stop-opacity=".85"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')
   const style =
     `@keyframes blob{0%{transform:translate(0,140px) scale(1,1)}25%{transform:translate(30px,-80px) scale(1.2,.85)}50%{transform:translate(-20px,-260px) scale(.85,1.2)}75%{transform:translate(20px,-80px) scale(1.15,.9)}100%{transform:translate(0,140px) scale(1,1)}}` +
     `.bl{animation:blob ease-in-out infinite;transform-box:fill-box;transform-origin:center}`
-  let body = `<g class="lo" filter="url(#lava)">`
+  let body = `<g class="lo">`
   for (let i = 0; i < 14; i++) {
     const dur = n(18 + r() * 16)
-    body += `<circle class="bl" cx="${n(r() * W)}" cy="${n(300 + r() * 600)}" r="${n(60 + r() * 90)}" fill="${tones[i % 3]}" opacity=".55" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"/>`
+    body += `<circle class="bl" cx="${n(r() * W)}" cy="${n(300 + r() * 600)}" r="${n(80 + r() * 110)}" fill="url(#lv${i % 3})" opacity=".6" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"/>`
   }
   return frame(p, style, body + '</g>', defs)
 }
 
 function mesh(p: Palette): string {
   const tones = [p.glow, hsl((p.hue + 60) % 360, 80, 66), hsl((p.hue + 300) % 360, 75, 68), hsl((p.hue + 180) % 360, 60, 66)]
-  const defs = `<filter id="meshb" filterUnits="userSpaceOnUse" x="-600" y="-600" width="2800" height="2200"><feGaussianBlur stdDeviation="110"/></filter>`
+  const defs = tones.map((c, k) => `<radialGradient id="mg${k}"><stop offset="0" stop-color="${c}"/><stop offset=".55" stop-color="${c}" stop-opacity=".55"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')
   const style =
     `@keyframes m1{0%,100%{transform:translate(0,0)}33%{transform:translate(380px,160px)}66%{transform:translate(-200px,260px)}}` +
     `@keyframes m2{0%,100%{transform:translate(0,0)}33%{transform:translate(-340px,-120px)}66%{transform:translate(180px,-240px)}}` +
     `.m1{animation:m1 46s ease-in-out infinite}.m2{animation:m2 54s ease-in-out infinite}`
   const body =
-    `<g class="lo" filter="url(#meshb)" opacity=".75">` +
-    `<circle class="m1" cx="250" cy="200" r="360" fill="${tones[0]}"/>` +
-    `<circle class="m2" cx="1350" cy="250" r="380" fill="${tones[1]}"/>` +
-    `<circle class="m2" style="animation-delay:-20s" cx="400" cy="850" r="340" fill="${tones[2]}"/>` +
-    `<circle class="m1" style="animation-delay:-30s" cx="1250" cy="850" r="360" fill="${tones[3]}"/>` +
+    `<g class="lo" opacity=".8">` +
+    `<circle class="m1" cx="250" cy="200" r="560" fill="url(#mg0)"/>` +
+    `<circle class="m2" cx="1350" cy="250" r="580" fill="url(#mg1)"/>` +
+    `<circle class="m2" style="animation-delay:-20s" cx="400" cy="850" r="540" fill="url(#mg2)"/>` +
+    `<circle class="m1" style="animation-delay:-30s" cx="1250" cy="850" r="560" fill="url(#mg3)"/>` +
     `</g>`
   return frame(p, style, body, defs)
 }
@@ -572,7 +577,7 @@ function warp(p: Palette): string {
     `@keyframes zoom{0%{transform:scale(.05);opacity:0}15%{opacity:1}100%{transform:scale(1.6);opacity:0}}` +
     `.z{animation:zoom ease-in infinite;transform-origin:${cx}px ${cy}px}`
   let body = `<g class="lo" stroke-linecap="round">`
-  for (let i = 0; i < 110; i++) {
+  for (let i = 0; i < 70; i++) {
     const a = r() * Math.PI * 2
     const d1 = 120 + r() * 700
     const d2 = d1 + 40 + r() * 90
@@ -586,16 +591,15 @@ function warp(p: Palette): string {
 function bokeh(p: Palette): string {
   const r = seeded(179)
   const tones = [p.glow, hsl((p.hue + 35) % 360, 80, 66), hsl(45, 90, 70), hsl((p.hue + 320) % 360, 70, 70)]
-  const defs = `<filter id="bk" filterUnits="userSpaceOnUse" x="-200" y="-200" width="2000" height="1400"><feGaussianBlur stdDeviation="6"/></filter>`
+  const defs = tones.map((c, k) => `<radialGradient id="bk${k}"><stop offset="0" stop-color="${c}" stop-opacity=".25"/><stop offset=".8" stop-color="${c}" stop-opacity=".5"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')
   const style =
     `@keyframes bob2{0%,100%{transform:translate(0,0);opacity:.35}50%{transform:translate(30px,-40px);opacity:.85}}` +
     `.bk{animation:bob2 ease-in-out infinite}`
-  let body = `<g class="lo" filter="url(#bk)">`
-  for (let i = 0; i < 40; i++) {
+  let body = `<g class="lo">`
+  for (let i = 0; i < 32; i++) {
     const dur = n(8 + r() * 12)
-    const rad = n(14 + r() * 50)
-    const c = tones[i % 4]
-    body += `<circle class="bk" cx="${n(r() * W)}" cy="${n(r() * H)}" r="${rad}" fill="${c}" fill-opacity=".45" stroke="${c}" stroke-opacity=".7" stroke-width="2" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"/>`
+    const rad = n(16 + r() * 52)
+    body += `<circle class="bk" cx="${n(r() * W)}" cy="${n(r() * H)}" r="${rad}" fill="url(#bk${i % 4})" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"/>`
   }
   return frame(p, style, body + '</g>', defs)
 }
@@ -627,14 +631,14 @@ function equalizer(p: Palette): string {
     `@keyframes eq{0%,100%{transform:scaleY(.15)}50%{transform:scaleY(1)}}` +
     `.eq{animation:eq ease-in-out infinite;transform-box:fill-box;transform-origin:bottom}`
   const defs = `<linearGradient id="eqg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${p.glow}"/><stop offset="1" stop-color="${hsl((p.hue + 60) % 360, 85, 66)}"/></linearGradient>`
-  const bars = 64
+  const bars = 48
   const bw = W / bars
   let body = `<g class="lo">`
   for (let i = 0; i < bars; i++) {
     const h = n(80 + r() * 220)
     const dur = n(0.6 + r() * 1.2)
     body += `<rect class="eq" x="${n(i * bw + 3)}" y="${n(H - h)}" width="${n(bw - 6)}" height="${h}" rx="3" fill="url(#eqg)" opacity=".7" style="animation-duration:${dur}s;animation-delay:-${n(r() * dur)}s"/>`
-    body += `<rect class="eq" x="${n(i * bw + 3)}" y="0" width="${n(bw - 6)}" height="${n(h * 0.35)}" rx="3" fill="url(#eqg)" opacity=".25" style="animation-duration:${dur}s;animation-delay:-${n(r() * dur)}s;transform-origin:top"/>`
+    void 0
   }
   return frame(p, style, body + '</g>', defs)
 }

@@ -313,3 +313,46 @@ test('the stats panel counts tools and edited files', async ($, on) => {
   expect(await ui.find({ type: 'Text', text: /\$0\.42/ })).toBeDefined()
   await ui.unmount()
 })
+
+const typed = async ($: any, text: string): Promise<string[]> => {
+  const token = /\S+$/.exec(text)?.[0] ?? ''
+  const r = await $.prompt.autocomplete({ text, cursor: text.length, token, start: text.length - token.length })
+  return r.suggestions.map((s: { text: string }) => s.text)
+}
+
+test('typing after /colors narrows the list letter by letter', async ($, on) => {
+  engine(on)
+  on('prompt.autocomplete', () => ({ suggestions: [] }))
+  await start($)
+  const s = await typed($, '/colors s')
+  const sa = await typed($, '/colors sa')
+  const sak = await typed($, '/colors sak')
+  expect(s.length).toBeGreaterThan(sa.length)
+  expect(sa.length).toBeGreaterThan(sak.length)
+  expect(sa.slice(0, 4)).toEqual(expect.arrayContaining(['sahara', 'sakura']))
+  expect(sak).toEqual(['sakura'])
+  expect(await typed($, '/colors star')).toEqual(expect.arrayContaining(['shooting-star', 'starlight-express']))
+  expect(await typed($, '/colors pan')).toContain('panel')
+  expect(await typed($, '/colors scene psy')).toEqual(['psychflow'])
+  expect(await typed($, '/colors spinner co')).toEqual(expect.arrayContaining(['coffee', 'cooking']))
+  expect(await typed($, '/colors badges pi')).toEqual(expect.arrayContaining(['pill', 'pill-icons', 'neon-pill']))
+  expect(await typed($, 'hello sa')).toEqual([])
+})
+
+test('badges can match the theme, or wear any color set', async ($, on) => {
+  engine(on)
+  await start($)
+  await colors($, 'sakura')
+  const draw = async () => {
+    const ui = await $.ui.mount({ plugin: 'olive-theme', component: 'AssistantMessage', surface: 'desktop', requestId: 'm9', props: { text: 'hi', isFirstOfReply: true } } as any)
+    const t = await ui.find({ type: 'Text', text: /claude/i })
+    await ui.unmount()
+    return t
+  }
+  expect((await draw())?.text).toBe('🌸 Claude')
+  expect(await colors($, 'badges neon-pill')).toBe('Message badges: neon-pill.')
+  expect(await colors($, 'badge-colors sunset')).toBe('Badge colors: sunset.')
+  const pill = await draw()
+  expect(pill?.text).toBe(' CLAUDE ')
+  expect(await colors($, 'badges list')).toContain('Message badges (48)')
+})

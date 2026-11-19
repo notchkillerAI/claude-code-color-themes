@@ -1,11 +1,13 @@
 import { atom, read, update } from 'claude-code'
+import { ON_OFF, choices, suggest } from './autocomplete.js'
+import type { Grammar } from './autocomplete.js'
 import type { EngineInterface as Engine, Register, ThemeSetArgs } from 'claude-code'
 
 import type { AutoMode, Prefs } from '../types'
 import { barCommand, registerBar, startBar, startFocus } from './bar.js' // bundle-only
 import { DEFAULTS } from './defaults.js'
 // bundle-only:start
-import { badgesCommand, BADGES, registerBadges } from './badges.js'
+import { BADGE_COLOR_NAMES, BADGE_NAMES, badgeColorsCommand, badgesCommand, BADGES, BADGE_COLORS, registerBadges } from './badges.js'
 import { cardsCommand, CARD_STYLES, registerCards } from './cards.js'
 import { registerMenu } from './menu.js'
 import { promptCommand, PROMPT_STYLES, registerPromptColors } from './promptcolors.js'
@@ -21,6 +23,8 @@ import {
   HEX,
   THEMES,
   fullDefinition,
+  groupOf,
+  hsl,
   hueSatOf,
   paletteFor,
   surpriseColor,
@@ -28,6 +32,89 @@ import {
 } from './themes.js'
 
 const PLUGIN = 'olive-theme'
+
+// ---------- type-ahead for /colors ----------
+
+const themeChoices = () =>
+  choices(NAMES, name => {
+    const kind = sceneFor(name, hueSatOf(name)[0])
+    return `${SCENES[kind].emoji} ${groupOf(name) ?? 'theme'} · ${SCENES[kind].label.toLowerCase()}`
+  })
+
+const SUBCOMMANDS = [
+  { name: 'panel', description: 'Open the theme picker panel' },
+  { name: 'random', description: 'A random theme' },
+  { name: 'surprise', description: 'A brand-new random palette' },
+  { name: 'custom', description: 'Make a theme from a #hex color' },
+  { name: 'save', description: 'Keep the current custom color as a palette' },
+  { name: 'delete', description: 'Remove a saved palette' },
+  { name: 'favorite', description: 'Star or unstar a theme' },
+  { name: 'undo', description: 'Back to the theme before' },
+  { name: 'scene', description: 'Pick the animated background' },
+  { name: 'glow', description: 'Light that follows your mouse' },
+  { name: 'auto', description: 'Themes by time, day or season' },
+  { name: 'contrast', description: 'Stronger borders' },
+  { name: 'code', description: 'Matching code colors' },
+  { name: 'sound', description: 'Sounds on or off' },
+  { name: 'help', description: 'Every command' },
+  // bundle-only:start
+  { name: 'bar', description: 'Ambient bar on or off' },
+  { name: 'clock', description: 'Clock in the bar' },
+  { name: 'quote', description: 'Daily quote in the bar' },
+  { name: 'focus', description: 'Start a focus timer' },
+  { name: 'break', description: 'Break length' },
+  { name: 'spinner', description: 'Themed thinking spinners' },
+  { name: 'prompt', description: 'Prompt highlighting style' },
+  { name: 'cards', description: 'Tool card style' },
+  { name: 'badges', description: 'Message badge design' },
+  { name: 'badge-colors', description: 'Message badge colors' },
+  { name: 'sounds', description: 'Sound pack' },
+  { name: 'voice', description: 'Spoken "All done!"' },
+  { name: 'stats', description: 'Session dashboard' },
+  // bundle-only:end
+]
+
+function grammar(prefs: Prefs): Grammar {
+  const themes = themeChoices()
+  const saved = choices(Object.keys(prefs.saved), name => `your palette ${prefs.saved[name] ?? ''}`)
+  const listOff = [{ name: 'list', description: 'Show every option' }, { name: 'off', description: 'Turn off' }]
+  return {
+    first: [...themes, ...saved, ...SUBCOMMANDS],
+    next: {
+      scene: [
+        { name: 'auto', description: 'Match each theme' },
+        { name: 'off', description: 'No scene' },
+        ...SCENE_KINDS.filter(k => k !== 'plain').map(k => ({ name: k, description: `${SCENES[k].emoji} ${SCENES[k].label}` })),
+      ],
+      auto: [
+        { name: 'time', description: 'Morning, day, evening and night themes' },
+        { name: 'daily', description: 'A new theme every day' },
+        { name: 'season', description: 'Spring, summer, autumn and winter' },
+        { name: 'off', description: 'Back to your own pick' },
+      ],
+      glow: ON_OFF,
+      contrast: ON_OFF,
+      code: ON_OFF,
+      sound: ON_OFF,
+      favorite: themes,
+      delete: saved,
+      // bundle-only:start
+      bar: ON_OFF,
+      clock: [...ON_OFF, { name: '12h', description: '9:42 PM' }, { name: '24h', description: '21:42' }],
+      quote: [...ON_OFF, { name: 'next', description: 'Show another quote' }],
+      focus: choices(['15', '25', '45', '50', '90', 'pause', 'stop', 'status'], n => (/^\d/.test(n) ? `${n} minute focus` : undefined)),
+      break: choices(['5', '10', '15'], n => `${n} minute breaks`),
+      spinner: [...choices(SPINNER_NAMES, n => (n === 'auto' ? 'Match the theme' : `${SPINNERS[n]?.verbs[0] ?? ''}${SPINNERS[n]?.suffix ?? ''}`)), ...listOff],
+      prompt: [...choices(Object.keys(PROMPT_STYLES)), ...listOff],
+      cards: [...choices(Object.keys(CARD_STYLES), n => `${CARD_STYLES[n]?.border ?? ''} border`), ...listOff],
+      badges: [...choices(BADGE_NAMES, n => (n === 'auto' ? 'Match the theme' : `${BADGES[n]?.you ?? ''} · ${BADGES[n]?.claude ?? ''}`)), ...listOff],
+      'badge-colors': [...choices(BADGE_COLOR_NAMES, n => (n === 'auto' ? 'Match the theme' : n === 'design' ? "The design's own colors" : undefined)), ...listOff],
+      sounds: [...choices(['classic', ...Object.keys(SOUND_PACKS)]), ...listOff],
+      voice: [...ON_OFF, ...choices(['Samantha', 'Daniel', 'Karen', 'Moira', 'Tessa', 'Alex'], () => 'A Mac voice')],
+      // bundle-only:end
+    },
+  }
+}
 const PANE = 'color-themes'
 const NAMES = Object.keys(THEMES)
 const AUTO_MODES: AutoMode[] = ['off', 'time', 'daily', 'season']
@@ -214,7 +301,8 @@ const HELP = [
   `  /colors spinner <name>     ${Object.keys(SPINNERS).length} spinners, or auto to match the theme`,
   `  /colors prompt <name>      ${Object.keys(PROMPT_STYLES).length} prompt highlighting styles`,
   `  /colors cards <name>       ${Object.keys(CARD_STYLES).length} tool card styles`,
-  `  /colors badges <name>      ${Object.keys(BADGES).length} message badge styles`,
+  `  /colors badges <name>      ${Object.keys(BADGES).length} message badge designs, or auto to match the theme`,
+  `  /colors badge-colors <set> ${Object.keys(BADGE_COLORS).length} badge color sets, auto (theme) or design`,
   `  /colors sounds <name>      ${Object.keys(SOUND_PACKS).length} sound packs`,
   '  /colors voice on|off|<Mac voice name>',
   '  /colors stats              session dashboard',
@@ -226,7 +314,8 @@ const EXTRA_KEYS = {
   spinner: [...SPINNER_NAMES, 'off'],
   prompt: [...Object.keys(PROMPT_STYLES), 'off'],
   cards: [...Object.keys(CARD_STYLES), 'off'],
-  badges: [...Object.keys(BADGES), 'off'],
+  badges: [...BADGE_NAMES, 'off'],
+  badgeColors: BADGE_COLOR_NAMES,
   sounds: ['classic', ...Object.keys(SOUND_PACKS), 'off'],
 }
 // bundle-only:end
@@ -261,7 +350,11 @@ export const register: Register = on => {
   registerSpinners(on, theme => sceneOf(DEFAULTS, theme))
   registerPromptColors(on)
   registerCards(on)
-  registerBadges(on)
+  registerBadges(on, prefs => {
+    const kind = sceneOf(prefs, prefs.theme)
+    const [hue] = hueSatOf(prefs.theme)
+    return { emoji: kind !== undefined ? SCENES[kind].emoji : '✦', you: hsl((hue + 180) % 360, 60, 68), claude: paletteFor(prefs.theme).glow }
+  })
   registerStats(on)
   registerMenu(on)
 
@@ -313,6 +406,16 @@ export const register: Register = on => {
     })
 
     return next(e)
+  })
+
+  // As each letter is typed after /colors, the list narrows to matching names.
+  on('prompt.autocomplete', async ($, e, next) => {
+    if (!/^\s*\/colors\s/.test(e.text)) return next(e)
+    const prefs = await read($, prefsAtom)
+    const mine = suggest(e, 'colors', grammar(prefs))
+    if (mine === undefined) return next(e)
+    const theirs = await next(e)
+    return { suggestions: [...theirs.suggestions, ...mine] }
   })
 
   on('command.run', { command: 'colors' }, async ($, e) => {
@@ -422,6 +525,9 @@ export const register: Register = on => {
       case 'badges':
       case 'messages':
         return { text: await badgesCommand($, arg) }
+      case 'badge-colors':
+      case 'badgecolors':
+        return { text: await badgeColorsCommand($, arg) }
       case 'sounds':
       case 'pack':
         return { text: await soundsCommand($, 'sounds', arg, rest) }
@@ -546,6 +652,7 @@ export const register: Register = on => {
           <Button key="x-prompt" onPress={() => void change($, p => ({ ...p, prompt: cycle(EXTRA_KEYS.prompt, p.prompt) }))}>⌨️ Prompt: {prefs.prompt}</Button>
           <Button key="x-cards" onPress={() => void change($, p => ({ ...p, cards: cycle(EXTRA_KEYS.cards, p.cards) }))}>🧰 Cards: {prefs.cards}</Button>
           <Button key="x-badges" onPress={() => void change($, p => ({ ...p, badges: cycle(EXTRA_KEYS.badges, p.badges) }))}>💬 Badges: {prefs.badges}</Button>
+          <Button key="x-badge-colors" onPress={() => void change($, p => ({ ...p, badgeColors: cycle(EXTRA_KEYS.badgeColors, p.badgeColors) }))}>🎨 Badge colors: {prefs.badgeColors}</Button>
           <Button key="x-sounds" onPress={() => void change($, p => ({ ...p, sounds: cycle(EXTRA_KEYS.sounds, p.sounds) }))}>🔔 Sounds: {prefs.sounds}</Button>
           <Button key="x-voice" onPress={() => void change($, p => ({ ...p, voice: !p.voice }))}>🗣️ Voice: {prefs.voice ? 'on' : 'off'}</Button>
           <Button key="x-stats" onPress={() => void $.ui.open({ id: 'session-stats', title: '📊 Session stats' })}>📊 Stats</Button>

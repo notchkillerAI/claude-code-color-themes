@@ -49,20 +49,38 @@ ${loadPrefs}
 ${extra}    return next(e)
   })`
 
+const typeahead = (cmd, grammar) => `  on('prompt.autocomplete', async ($, e, next) => {
+    const mine = suggest(e, '${cmd}', ${grammar})
+    if (mine === undefined) return next(e)
+    const theirs = await next(e)
+    return { suggestions: [...theirs.suggestions, ...mine] }
+  })`
+const AC = "import { ON_OFF, choices, suggest } from './autocomplete.js'"
+const LIST_OFF = "[{ name: 'list', description: 'Show every option' }, { name: 'off', description: 'Turn off' }]"
+
 const PLUGINS = [
   {
     name: 'color-themes',
     description: '209 color themes with animated scenes, a mouse glow, a picker panel, auto themes and custom colors (/colors)',
-    files: ['themes.ts', 'scenes.ts', 'glow.ts', 'make-colors.js', 'make-colors.d.ts', 'defaults.ts', 'prefs.ts'],
+    files: ['themes.ts', 'scenes.ts', 'glow.ts', 'make-colors.js', 'make-colors.d.ts', 'defaults.ts', 'prefs.ts', 'autocomplete.ts'],
     sounds: true,
     register: () => stripBundle(readFileSync('hooks/register.tsx', 'utf8')),
   },
   {
     name: 'ambient-bar',
     description: 'A clock, a focus timer and a daily quote above the prompt (/bar)',
-    files: ['bar.tsx', 'prefs.ts', 'defaults.ts'],
+    files: ['bar.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
     sounds: true,
-    register: n => standalone(n, "import { BAR_HELP, barCommand, registerBar, startBar } from './bar.js'", `  const deps = { themeLabel: () => '' }
+    register: n => standalone(n, "import { BAR_HELP, barCommand, registerBar, startBar } from './bar.js'\n" + AC, `${typeahead('bar', `{
+    first: [...ON_OFF, ...choices(['focus', 'clock', 'quote', 'break', 'help'])],
+    next: {
+      focus: choices(['15', '25', '45', '50', '90', 'pause', 'stop', 'status']),
+      clock: [...ON_OFF, ...choices(['12h', '24h'])],
+      quote: [...ON_OFF, ...choices(['next'])],
+      break: choices(['5', '10', '15']),
+    },
+  }`)}
+  const deps = { themeLabel: () => '' }
   registerBar(on, deps)
 ${start('bar', 'Clock, focus timer and daily quote above the prompt', 'focus 25 | clock 24h | quote next | on | off', '    await startBar($, deps)\n')}
 ${command('bar', '', '', "first === undefined || first === 'help' ? Promise.resolve(BAR_HELP) : first === 'on' || first === 'off' ? barCommand($, 'bar', first) : barCommand($, first, words[1]?.toLowerCase())")}`),
@@ -70,41 +88,52 @@ ${command('bar', '', '', "first === undefined || first === 'help' ? Promise.reso
   {
     name: 'fun-spinners',
     description: '27 themed spinners: Brewing ☕, Wishing 🌠, Swirling 🌀 and more (/spinner)',
-    files: ['spinners.tsx', 'prefs.ts', 'defaults.ts'],
-    register: n => standalone(n, "import { registerSpinners, spinnerCommand } from './spinners.js'", `  registerSpinners(on, () => undefined)
+    files: ['spinners.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    register: n => standalone(n, "import { SPINNER_NAMES, SPINNERS, registerSpinners, spinnerCommand } from './spinners.js'\n" + AC, `${typeahead('spinner', `{ first: [...choices(SPINNER_NAMES, n => \`\${SPINNERS[n]?.verbs[0] ?? 'Match the theme'}\${SPINNERS[n]?.suffix ?? ''}\`), ...${LIST_OFF}] }`)}
+  registerSpinners(on, () => undefined)
 ${start('spinner', 'Pick a themed spinner', '<name> | list | off')}
 ${command('spinner', '', '', "spinnerCommand($, first, '/spinner')")}`),
   },
   {
     name: 'prompt-colors',
     description: '24 styles that color /commands, @files, links and TODOs as you type (/prompt-colors)',
-    files: ['promptcolors.tsx', 'prefs.ts', 'defaults.ts'],
-    register: n => standalone(n, "import { promptCommand, registerPromptColors } from './promptcolors.js'", `  registerPromptColors(on)
+    files: ['promptcolors.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    register: n => standalone(n, "import { PROMPT_STYLES, promptCommand, registerPromptColors } from './promptcolors.js'\n" + AC, `${typeahead('prompt-colors', `{ first: [...choices(Object.keys(PROMPT_STYLES)), ...${LIST_OFF}] }`)}
+  registerPromptColors(on)
 ${start('prompt-colors', 'Color the prompt as you type', '<style> | list | off')}
 ${command('prompt-colors', '', '', "promptCommand($, first, '/prompt-colors')")}`),
   },
   {
     name: 'tool-cards',
     description: '22 card styles around each tool step, with icons, status and test bars (/tool-cards)',
-    files: ['cards.tsx', 'prefs.ts', 'defaults.ts'],
-    register: n => standalone(n, "import { cardsCommand, registerCards } from './cards.js'", `  registerCards(on)
+    files: ['cards.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    register: n => standalone(n, "import { CARD_STYLES, cardsCommand, registerCards } from './cards.js'\n" + AC, `${typeahead('tool-cards', `{ first: [...choices(Object.keys(CARD_STYLES)), ...${LIST_OFF}] }`)}
+  registerCards(on)
 ${start('tool-cards', 'Style the tool rows as cards', '<style> | list | off')}
 ${command('tool-cards', '', '', "cardsCommand($, first, '/tool-cards')")}`),
   },
   {
     name: 'message-badges',
-    description: '22 badge styles above your messages and Claude replies (/badges)',
-    files: ['badges.tsx', 'prefs.ts', 'defaults.ts'],
-    register: n => standalone(n, "import { badgesCommand, registerBadges } from './badges.js'", `  registerBadges(on)
-${start('badges', 'Add badges to messages', '<style> | list | off')}
-${command('badges', '', '', "badgesCommand($, first, '/badges')")}`),
+    description: '48 badge designs and 22 color sets for your messages and Claude replies (/badges)',
+    files: ['badges.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
+    register: n => standalone(n, "import { BADGE_COLOR_NAMES, BADGE_NAMES, BADGES, badgeColorsCommand, badgesCommand, registerBadges } from './badges.js'\n" + AC, `${typeahead('badges', `{
+    first: [...choices(BADGE_NAMES, n => \`\${BADGES[n]?.you ?? '◆ You'} · \${BADGES[n]?.claude ?? '✦ Claude'}\`), { name: 'colors', description: 'Pick the badge colors' }, ...${LIST_OFF}],
+    next: { colors: choices(BADGE_COLOR_NAMES) },
+  }`)}
+  registerBadges(on)
+${start('badges', 'Add badges to messages', '<design> | colors <set> | list | off')}
+${command('badges', '', '', "first === 'colors' ? badgeColorsCommand($, words[1]?.toLowerCase(), '/badges colors') : badgesCommand($, first, '/badges')")}`),
   },
   {
     name: 'sound-packs',
     description: '25 sound packs for done, error and question, plus a spoken "All done!" (/sounds)',
-    files: ['sounds.tsx', 'prefs.ts', 'defaults.ts'],
+    files: ['sounds.tsx', 'prefs.ts', 'defaults.ts', 'autocomplete.ts'],
     sounds: true,
-    register: n => standalone(n, "import { doneLine, playEvent, soundsCommand } from './sounds.js'", `${start('sounds', 'Pick a sound pack or turn on the voice', '<pack> | list | off | voice on|off|<name>')}
+    register: n => standalone(n, "import { SOUND_PACKS, doneLine, playEvent, soundsCommand } from './sounds.js'\n" + AC, `${typeahead('sounds', `{
+    first: [...choices(['classic', ...Object.keys(SOUND_PACKS)]), { name: 'voice', description: 'Spoken \\"All done!\\"' }, ...${LIST_OFF}],
+    next: { voice: [...ON_OFF, ...choices(['Samantha', 'Daniel', 'Karen', 'Moira', 'Tessa', 'Alex'])] },
+  }`)}
+${start('sounds', 'Pick a sound pack or turn on the voice', '<pack> | list | off | voice on|off|<name>')}
 ${command('sounds', '', '', "first === 'voice' ? soundsCommand($, 'voice', words[1]?.toLowerCase(), words.slice(1).join(' ') === 'on' || words.slice(1).join(' ') === 'off' ? '' : words.slice(1).join(' '), '/sounds voice') : soundsCommand($, 'sounds', first, rest, '/sounds')")}
   on('tool.call', async ($, e, next) => {
     if (e.tool === 'AskUserQuestion') void playEvent($, 'ask', 'I have a question for you.')

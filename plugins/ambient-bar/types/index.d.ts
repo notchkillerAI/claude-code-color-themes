@@ -27,6 +27,8 @@ export type Prefs = {
   prompt: string
   cards: string
   badges: string
+  /** 'auto' (match the theme), 'design' (the design's own) or a color set. */
+  badgeColors: string
   sounds: string
   voice: boolean
   voiceName: string

@@ -1,4 +1,6 @@
 import { atom, read, update } from 'claude-code'
+import { ON_OFF, choices, suggest } from './autocomplete.js'
+import type { Grammar } from './autocomplete.js'
 import type { EngineInterface as Engine, Register, ThemeSetArgs } from 'claude-code'
 
 import type { AutoMode, Prefs } from '../types'
@@ -11,6 +13,8 @@ import {
   HEX,
   THEMES,
   fullDefinition,
+  groupOf,
+  hsl,
   hueSatOf,
   paletteFor,
   surpriseColor,
@@ -18,6 +22,60 @@ import {
 } from './themes.js'
 
 const PLUGIN = 'color-themes'
+
+// ---------- type-ahead for /colors ----------
+
+const themeChoices = () =>
+  choices(NAMES, name => {
+    const kind = sceneFor(name, hueSatOf(name)[0])
+    return `${SCENES[kind].emoji} ${groupOf(name) ?? 'theme'} · ${SCENES[kind].label.toLowerCase()}`
+  })
+
+const SUBCOMMANDS = [
+  { name: 'panel', description: 'Open the theme picker panel' },
+  { name: 'random', description: 'A random theme' },
+  { name: 'surprise', description: 'A brand-new random palette' },
+  { name: 'custom', description: 'Make a theme from a #hex color' },
+  { name: 'save', description: 'Keep the current custom color as a palette' },
+  { name: 'delete', description: 'Remove a saved palette' },
+  { name: 'favorite', description: 'Star or unstar a theme' },
+  { name: 'undo', description: 'Back to the theme before' },
+  { name: 'scene', description: 'Pick the animated background' },
+  { name: 'glow', description: 'Light that follows your mouse' },
+  { name: 'auto', description: 'Themes by time, day or season' },
+  { name: 'contrast', description: 'Stronger borders' },
+  { name: 'code', description: 'Matching code colors' },
+  { name: 'sound', description: 'Sounds on or off' },
+  { name: 'help', description: 'Every command' },
+]
+
+function grammar(prefs: Prefs): Grammar {
+  const themes = themeChoices()
+  const saved = choices(Object.keys(prefs.saved), name => `your palette ${prefs.saved[name] ?? ''}`)
+  const listOff = [{ name: 'list', description: 'Show every option' }, { name: 'off', description: 'Turn off' }]
+  return {
+    first: [...themes, ...saved, ...SUBCOMMANDS],
+    next: {
+      scene: [
+        { name: 'auto', description: 'Match each theme' },
+        { name: 'off', description: 'No scene' },
+        ...SCENE_KINDS.filter(k => k !== 'plain').map(k => ({ name: k, description: `${SCENES[k].emoji} ${SCENES[k].label}` })),
+      ],
+      auto: [
+        { name: 'time', description: 'Morning, day, evening and night themes' },
+        { name: 'daily', description: 'A new theme every day' },
+        { name: 'season', description: 'Spring, summer, autumn and winter' },
+        { name: 'off', description: 'Back to your own pick' },
+      ],
+      glow: ON_OFF,
+      contrast: ON_OFF,
+      code: ON_OFF,
+      sound: ON_OFF,
+      favorite: themes,
+      delete: saved,
+    },
+  }
+}
 const PANE = 'color-themes'
 const NAMES = Object.keys(THEMES)
 const AUTO_MODES: AutoMode[] = ['off', 'time', 'daily', 'season']
@@ -241,6 +299,16 @@ export const register: Register = on => {
     })
 
     return next(e)
+  })
+
+  // As each letter is typed after /colors, the list narrows to matching names.
+  on('prompt.autocomplete', async ($, e, next) => {
+    if (!/^\s*\/colors\s/.test(e.text)) return next(e)
+    const prefs = await read($, prefsAtom)
+    const mine = suggest(e, 'colors', grammar(prefs))
+    if (mine === undefined) return next(e)
+    const theirs = await next(e)
+    return { suggestions: [...theirs.suggestions, ...mine] }
   })
 
   on('command.run', { command: 'colors' }, async ($, e) => {
