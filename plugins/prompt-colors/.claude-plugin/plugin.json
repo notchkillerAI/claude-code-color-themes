@@ -1,6 +1,6 @@
 {
   "name": "prompt-colors",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "24 styles that color /commands, @files, links and TODOs as you type (/prompt-colors)",
   "author": {
     "name": "Arpan Bhattacharya",

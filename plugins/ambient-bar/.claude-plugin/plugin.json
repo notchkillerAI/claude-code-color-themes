@@ -1,6 +1,6 @@
 {
   "name": "ambient-bar",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "A clock, a focus timer and a daily quote above the prompt (/bar)",
   "author": {
     "name": "Arpan Bhattacharya",

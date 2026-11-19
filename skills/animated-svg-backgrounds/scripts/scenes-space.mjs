@@ -116,6 +116,7 @@ function shootingstars(p) {
   const pink = hsl((p.hue + 330) % 360, 85, 62)
   const sun1 = hsl(45, 95, 62)
   const r = seeded(151)
+  const floor = rollingFloor(640, 12, 7, 'sfl')
   const defs =
     `<linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${hsl(p.hue, 60, 12)}" stop-opacity=".9"/><stop offset=".7" stop-color="${hsl((p.hue + 330) % 360, 70, 30)}" stop-opacity=".75"/><stop offset="1" stop-color="${pink}" stop-opacity=".6"/></linearGradient>` +
     `<linearGradient id="sun2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sun1}"/><stop offset="1" stop-color="${pink}"/></linearGradient>` +
@@ -123,52 +124,62 @@ function shootingstars(p) {
     `<clipPath id="sunclip"><rect x="1050" y="360" width="500" height="280"/></clipPath><clipPath id="sundisc"><circle cx="1300" cy="560" r="190"/></clipPath>`
   const style =
     TWINKLE +
-    `@keyframes streak{0%{transform:translate(0,0);opacity:0}6%{opacity:1}22%{transform:translate(-700px,420px);opacity:0}100%{transform:translate(-700px,420px);opacity:0}}` +
-    `.st{animation:streak linear infinite}` +
-    `@keyframes floor{from{transform:translateY(0)}to{transform:translateY(48px)}}.fm{animation:floor 2.4s linear infinite}`
+    `@keyframes streak{0%{transform:translate(0,0);opacity:0}8%{opacity:1}45%{opacity:.9}60%{transform:translate(-760px,456px);opacity:0}100%{transform:translate(-760px,456px);opacity:0}}` +
+    `.st{animation:streak 6s linear infinite;will-change:transform,opacity}` +
+    floor.style
   let streaks = ''
-  for (let i = 0; i < 14; i++) {
-    const dur = n(5 + r() * 7)
-    streaks += `<g transform="translate(${n(500 + r() * 1300)},${n(-40 + r() * 300)}) rotate(149)"><rect class="st" width="160" height="2.4" rx="1.2" fill="url(#tail)" style="animation-duration:${dur}s;animation-delay:${n(-r() * dur)}s"/></g>`
+  // One leaves every half second, from a different place each time: a steady stream.
+  for (let i = 0; i < 12; i++) {
+    streaks += `<g transform="translate(${n(500 + r() * 1300)},${n(-40 + r() * 300)}) rotate(149)"><rect class="st" width="${n(120 + r() * 80)}" height="2.4" rx="1.2" fill="url(#tail)" style="animation-delay:-${n(i * 0.5)}s"/></g>`
   }
   let stripes = ''
   for (let i = 0; i < 6; i++) stripes += `<rect x="1040" y="${520 + i * 20}" width="520" height="${3 + i * 2}" fill="${hsl(p.hue, 60, 14)}"/>`
   const horizon = 640
   let vlines = ''
   for (let i = -18; i <= 18; i++) vlines += `<path d="M${800 + i * 28} ${horizon} L${800 + i * 200} ${H + 40}"/>`
-  let hlines = ''
-  for (let i = 0; i < 9; i++) hlines += `<path d="M-200 ${horizon + 8 + i * i * 6 + i * 18} H${W + 200}"/>`
   const body =
     `<rect width="${W}" height="${H}" fill="url(#sky2)"/>` +
     `<g opacity=".8">${starField({ ...p, glow: '#ffffff' }, 157, 120)}</g>` +
     `<g clip-path="url(#sunclip)"><g clip-path="url(#sundisc)"><circle cx="1300" cy="560" r="190" fill="url(#sun2)"/>${stripes}</g></g>` +
     streaks +
     `<rect y="${horizon}" width="${W}" height="${H - horizon}" fill="${hsl(p.hue, 60, 8)}" opacity=".85"/>` +
-    `<g stroke="${pink}" stroke-width="2" opacity=".75">${vlines}<g class="fm">${hlines}</g></g>` +
+    `<g stroke="${pink}" stroke-width="2" opacity=".75">${vlines}${floor.lines}</g>` +
     `<path d="M0 ${horizon} H${W}" stroke="${sun1}" stroke-width="3"/>`
   return frame(p, style, body, defs)
+}
+
+/**
+ * A perspective floor that rolls forever: every line starts at the horizon,
+ * speeds up as it comes closer, and leaves past the bottom, each one evenly
+ * staggered, so there is never a jump or a reset.
+ */
+function rollingFloor(horizon, count, seconds, name) {
+  const travel = H - horizon + 60
+  const style =
+    `@keyframes ${name}{0%{transform:translateY(0);opacity:0}6%{opacity:1}100%{transform:translateY(${travel}px);opacity:1}}` +
+    `.${name}{animation:${name} ${seconds}s cubic-bezier(.55,0,.9,.6) infinite;will-change:transform}`
+  let lines = ''
+  for (let k = 0; k < count; k++) {
+    lines += `<path class="${name}" d="M-200 ${horizon} H${W + 200}" style="animation-delay:-${n((k * seconds) / count)}s"/>`
+  }
+  return { style, lines }
 }
 
 function grid(p) {
   const neon = p.glow
   const neon2 = hsl((p.hue + 60) % 360, 85, 62)
+  const floor = rollingFloor(640, 10, 6, 'gfl')
   const defs =
     `<linearGradient id="sunG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${neon2}"/><stop offset="1" stop-color="${neon}"/></linearGradient>` +
     `<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${neon}" stop-opacity="0"/><stop offset="1" stop-color="${neon}" stop-opacity=".9"/></linearGradient>` +
     `<clipPath id="half"><rect x="1120" y="40" width="440" height="230"/></clipPath>`
   const style =
-    `@keyframes move{from{transform:translateY(0)}to{transform:translateY(60px)}}` +
-    `.mv{animation:move 3s linear infinite}` +
+    floor.style +
     `@keyframes hum{0%,100%{opacity:.75}50%{opacity:1}}.sunr{animation:hum 6s ease-in-out infinite}`
   const horizon = 640
   let vertical = ''
   for (let i = -16; i <= 16; i++) {
     vertical += `<path d="M${800 + i * 30} ${horizon} L${800 + i * 190} ${H + 40}" />`
-  }
-  let horizontal = ''
-  for (let i = 0; i < 8; i++) {
-    const y = horizon + 10 + i * i * 8 + i * 22
-    horizontal += `<path d="M-200 ${y} H${W + 200}"/>`
   }
   let stripes = ''
   for (let i = 0; i < 6; i++) {
@@ -179,7 +190,7 @@ function grid(p) {
     `<g class="sunr"><circle cx="1340" cy="270" r="200" fill="url(#sunG)" clip-path="url(#half)" opacity=".85"/>${stripes}</g>` +
     `<rect y="${horizon}" width="${W}" height="${H - horizon}" fill="url(#fade)" opacity=".18"/>` +
     `<g stroke="${neon}" stroke-width="2" opacity=".6">${vertical}</g>` +
-    `<g stroke="${neon}" stroke-width="2" opacity=".6"><g class="mv">${horizontal}</g></g>` +
+    `<g stroke="${neon}" stroke-width="2" opacity=".6">${floor.lines}</g>` +
     `<path d="M0 ${horizon} H${W}" stroke="${neon2}" stroke-width="3" opacity=".9"/>` +
     `</g>`
   return frame(p, style, body, defs)

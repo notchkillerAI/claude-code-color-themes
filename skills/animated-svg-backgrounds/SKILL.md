@@ -2,7 +2,7 @@
 name: animated-svg-backgrounds
 description: Generate lightweight animated SVG backgrounds and GitHub README banners (falling petals, shooting stars, synthwave grid, mesh gradient, aurora, code rain, lava lamp and 20 more scenes) tinted to any color. Use when the user wants an animated banner, hero image, README header, website background, or a moving decorative SVG.
 summary: 27 animated SVG banners and backgrounds for READMEs and websites, tinted to any color, with an optional title. Pure SVG and CSS, no JavaScript, usually under 20 KB.
-version: 1.1.0
+version: 1.2.0
 tags: [svg, animation, readme, banner, background, design, github, synthwave]
 keywords: [animated banner, readme header, svg background, hero image, animated svg, github readme banner]
 use_cases:
